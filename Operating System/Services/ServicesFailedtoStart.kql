@@ -1,0 +1,15 @@
+let ErrorTable = datatable (Code: string, Message: string ) 
+[
+    
+"%%1069" , "The service did not start due to a logon failure."
+
+];
+
+let MessagesBag = toscalar (ErrorTable | extend p = pack(Code, Message) | summarize  dict = make_bag(p));
+
+Event
+| where Source == 'Service Control Manager' and EventLog == 'System' and EventID  == 7000 
+| project Computer,EventData,TimeGenerated
+| extend EventError = parse_xml(EventData)
+| extend ErrorCode = (EventError.DataItem.EventData.Data)[1].["#text"],ServiceName = (EventError.DataItem.EventData.Data)[0].["#text"]
+| project Computer,ErrorCode,ServiceName,TimeGenerated | extend Message = MessagesBag[tostring(ErrorCode)]
