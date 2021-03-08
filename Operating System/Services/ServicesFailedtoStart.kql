@@ -1,6 +1,18 @@
 let ErrorTable = datatable (Code: string, Message: string ) 
 [
-"%%1069","The service did not start due to a logon failure."
+"%%1069","The service did not start due to a logon failure.",
+"%%1057","The account name is invalid or does not exist, or the password is invalid for the account name specified.",
+"%%1331","Account Currently Disabled",
+"%%50","Insufficient Rights",
+"%%1909","The Referenced account is currently locked out and may not be logged on to.",
+"%%8","Not enough memory",
+"%%1326","The User Name and password is incorrect",
+"%%1787","The security database on the server does not have a computer account for this workstation trust relationship",
+"%%1053","The Service did not respond to the start or control request in a timely fashion",
+"%%2","The system cannot find the file specified.",
+"%%1275","This driver has been blocked from loading",
+"%%1455","The paging file is to small for this operation to complete.",
+"%%3","The system cannot find the path specified."
 ];
 let MessagesBag = toscalar (ErrorTable | extend p = pack(Code, Message) | summarize  dict = make_bag(p));
 Event
