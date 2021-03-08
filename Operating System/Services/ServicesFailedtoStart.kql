@@ -12,7 +12,9 @@ let ErrorTable = datatable (Code: string, Message: string )
 "%%2","The system cannot find the file specified.",
 "%%1275","This driver has been blocked from loading",
 "%%1455","The paging file is to small for this operation to complete.",
-"%%3","The system cannot find the path specified."
+"%%3","The system cannot find the path specified.",
+"%%1060","The specified service does not exist as an installed service.",
+"%%109","The pipe has been ended."
 ];
 let MessagesBag = toscalar (ErrorTable | extend p = pack(Code, Message) | summarize  dict = make_bag(p));
 Event
