@@ -1,12 +1,8 @@
 let ErrorTable = datatable (Code: string, Message: string ) 
 [
-    
-"%%1069" , "The service did not start due to a logon failure."
-
+"%%1069","The service did not start due to a logon failure."
 ];
-
 let MessagesBag = toscalar (ErrorTable | extend p = pack(Code, Message) | summarize  dict = make_bag(p));
-
 Event
 | where Source == 'Service Control Manager' and EventLog == 'System' and EventID  == 7000 
 | project Computer,EventData,TimeGenerated
