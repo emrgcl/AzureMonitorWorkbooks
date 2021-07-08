@@ -1,0 +1,332 @@
+{
+    "version": "Notebook/1.0",
+    "items": [
+      {
+        "type": 1,
+        "content": {
+          "json": "# Software Changes"
+        },
+        "name": "text - 0"
+      },
+      {
+        "type": 9,
+        "content": {
+          "version": "KqlParameterItem/1.0",
+          "crossComponentResources": [
+            "{Subscriptions}"
+          ],
+          "parameters": [
+            {
+              "id": "ad793dc4-c4de-4a3a-aee0-7232b689aa1f",
+              "version": "KqlParameterItem/1.0",
+              "name": "DefaultSubscription_Internal",
+              "type": 1,
+              "query": "where type =~ 'microsoft.operationalinsights/workspaces'\r\n| take 1\r\n| project subscriptionId",
+              "isHiddenWhenLocked": true,
+              "timeContext": {
+                "durationMs": 86400000
+              },
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces"
+            },
+            {
+              "id": "9e7cb7dc-2a00-4e6e-ab69-a750e3545b99",
+              "version": "KqlParameterItem/1.0",
+              "name": "Subscriptions",
+              "type": 6,
+              "isRequired": true,
+              "multiSelect": true,
+              "quote": "'",
+              "delimiter": ",",
+              "query": "summarize by subscriptionId\r\n| project value = strcat(\"/subscriptions/\", subscriptionId), label = subscriptionId, selected = iff(subscriptionId =~ '{DefaultSubscription_Internal}', true, false)",
+              "crossComponentResources": [
+                "value::selected"
+              ],
+              "value": [
+                "/subscriptions/acb67c1b-8a90-4587-bebb-6e53cbdaeb0f"
+              ],
+              "typeSettings": {
+                "additionalResourceOptions": [
+                  "value::all"
+                ],
+                "showDefault": false
+              },
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources"
+            },
+            {
+              "id": "56cde915-d0c2-424c-8ab9-300c6e3a385b",
+              "version": "KqlParameterItem/1.0",
+              "name": "Help",
+              "label": "Documentation",
+              "type": 10,
+              "isRequired": true,
+              "typeSettings": {
+                "additionalResourceOptions": [],
+                "showDefault": false
+              },
+              "jsonData": "[\r\n    { \"value\":\"true\", \"label\":\"Show Help\" },\r\n    { \"value\":\"false\", \"label\":\"Hide Help\" },\r\n    { \"value\":\"changelog\", \"label\":\"Change Log\", \"selected\":true }\r\n]",
+              "timeContext": {
+                "durationMs": 86400000
+              },
+              "value": "false"
+            },
+            {
+              "id": "22697f3d-2d29-45bf-8fad-b92b7939c8f8",
+              "version": "KqlParameterItem/1.0",
+              "name": "Workspaces",
+              "type": 5,
+              "query": "where type =~ 'microsoft.operationalinsights/workspaces'\r\n| project id, selected = iff(id =~ todynamic('{DefaultSubscription_Internal}').ws, true, false), custId= properties.customerId",
+              "crossComponentResources": [
+                "{Subscriptions}"
+              ],
+              "value": "/subscriptions/acb67c1b-8a90-4587-bebb-6e53cbdaeb0f/resourceGroups/Sekerbank-RG/providers/Microsoft.OperationalInsights/workspaces/SekerBankOMS",
+              "typeSettings": {
+                "additionalResourceOptions": [
+                  "value::1"
+                ]
+              },
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources"
+            },
+            {
+              "id": "6b0e6062-5ce7-4054-ba25-8e44052ada67",
+              "version": "KqlParameterItem/1.0",
+              "name": "TimeRange",
+              "label": "Time Range",
+              "type": 4,
+              "typeSettings": {
+                "selectableValues": [
+                  {
+                    "durationMs": 300000
+                  },
+                  {
+                    "durationMs": 900000
+                  },
+                  {
+                    "durationMs": 1800000
+                  },
+                  {
+                    "durationMs": 3600000
+                  },
+                  {
+                    "durationMs": 14400000
+                  },
+                  {
+                    "durationMs": 43200000
+                  },
+                  {
+                    "durationMs": 86400000
+                  },
+                  {
+                    "durationMs": 172800000
+                  },
+                  {
+                    "durationMs": 259200000
+                  },
+                  {
+                    "durationMs": 604800000
+                  },
+                  {
+                    "durationMs": 1209600000
+                  },
+                  {
+                    "durationMs": 2419200000
+                  },
+                  {
+                    "durationMs": 2592000000
+                  },
+                  {
+                    "durationMs": 5184000000
+                  },
+                  {
+                    "durationMs": 7776000000
+                  }
+                ]
+              },
+              "value": {
+                "durationMs": 2592000000
+              }
+            }
+          ],
+          "style": "pills",
+          "queryType": 1,
+          "resourceType": "microsoft.resourcegraph/resources"
+        },
+        "name": "parameters - 1"
+      },
+      {
+        "type": 1,
+        "content": {
+          "json": "# Help \r\n\r\n## Requirements\r\nChangeTracking solution needs to be enabled on related Log Analytics Workspace.\r\n\r\n\r\n## Limitations"
+        },
+        "conditionalVisibility": {
+          "parameterName": "Help",
+          "comparison": "isEqualTo",
+          "value": "true"
+        },
+        "name": "text - 2"
+      },
+      {
+        "type": 1,
+        "content": {
+          "json": "# Change Log\r\n- Added Parameters and Documentation"
+        },
+        "conditionalVisibility": {
+          "parameterName": "Help",
+          "comparison": "isEqualTo",
+          "value": "changelog"
+        },
+        "name": "text - 3"
+      },
+      {
+        "type": 12,
+        "content": {
+          "version": "NotebookGroup/1.0",
+          "groupType": "editable",
+          "items": [
+            {
+              "type": 3,
+              "content": {
+                "version": "KqlItem/1.0",
+                "query": "ConfigurationChange \r\n| where ConfigChangeType == 'Software'\r\n| summarize count() by SoftwareType, ChangeCategory\r\n| project  Item = strcat(SoftwareType, ' - ', ChangeCategory), SoftwareType, ChangeCategory,count_",
+                "size": 0,
+                "timeContext": {
+                  "durationMs": 0
+                },
+                "timeContextFromParameter": "TimeRange",
+                "exportedParameters": [
+                  {
+                    "fieldName": "ChangeCategory",
+                    "parameterName": "ChangeCategory",
+                    "parameterType": 1,
+                    "defaultValue": "\"\""
+                  },
+                  {
+                    "fieldName": "SoftwareType",
+                    "parameterName": "SoftwareType",
+                    "parameterType": 1,
+                    "defaultValue": "\"\""
+                  }
+                ],
+                "showExportToExcel": true,
+                "queryType": 0,
+                "resourceType": "microsoft.operationalinsights/workspaces",
+                "crossComponentResources": [
+                  "{Workspaces}"
+                ],
+                "visualization": "tiles",
+                "tileSettings": {
+                  "titleContent": {
+                    "columnMatch": "Item",
+                    "formatter": 1
+                  },
+                  "leftContent": {
+                    "columnMatch": "count_",
+                    "formatter": 12,
+                    "formatOptions": {
+                      "palette": "auto"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "maximumSignificantDigits": 3,
+                        "maximumFractionDigits": 2
+                      }
+                    }
+                  },
+                  "showBorder": false
+                }
+              },
+              "customWidth": "50",
+              "name": "query - 6",
+              "styleSettings": {
+                "showBorder": true
+              }
+            },
+            {
+              "type": 3,
+              "content": {
+                "version": "KqlItem/1.0",
+                "query": "ConfigurationChange \r\n| where ConfigChangeType == 'Software'\r\n| where SoftwareType == \"{SoftwareType}\" or isempty(\"{SoftwareType}\")\r\n| where ChangeCategory ==  \"{ChangeCategory}\" or isempty(\"{ChangeCategory}\")\r\n| summarize count() by SoftwareName\r\n| order by count_ desc\r\n//| project  Item = strcat(SoftwareType, ' ', ChangeCategory), SoftwareType, ChangeCategory,count_",
+                "size": 0,
+                "timeContext": {
+                  "durationMs": 0
+                },
+                "timeContextFromParameter": "TimeRange",
+                "exportFieldName": "SoftwareName",
+                "exportParameterName": "SoftwareName",
+                "exportDefaultValue": "\"\"",
+                "queryType": 0,
+                "resourceType": "microsoft.operationalinsights/workspaces",
+                "crossComponentResources": [
+                  "{Workspaces}"
+                ],
+                "gridSettings": {
+                  "filter": true,
+                  "sortBy": [
+                    {
+                      "itemKey": "count_",
+                      "sortOrder": 2
+                    }
+                  ]
+                },
+                "sortBy": [
+                  {
+                    "itemKey": "count_",
+                    "sortOrder": 2
+                  }
+                ]
+              },
+              "customWidth": "50",
+              "name": "query - 2",
+              "styleSettings": {
+                "showBorder": true
+              }
+            },
+            {
+              "type": 3,
+              "content": {
+                "version": "KqlItem/1.0",
+                "query": "ConfigurationChange\r\n| where ConfigChangeType == 'Software'\r\n| where SoftwareType == \"{SoftwareType}\" or isempty(\"{SoftwareType}\")\r\n| where ChangeCategory ==  \"{ChangeCategory}\" or isempty(\"{ChangeCategory}\")\r\n| where SoftwareName == \"{SoftwareName}\" or isempty(\"{SoftwareName}\")\r\n| project TimeGenerated,Server = strcat('💻 ',Computer), ChangeCategory,SoftwareName,Previous,Current,SoftwareType,Publisher,SoftwareDescription\r\n",
+                "size": 0,
+                "timeContext": {
+                  "durationMs": 2592000000
+                },
+                "timeContextFromParameter": "TimeRange",
+                "showExportToExcel": true,
+                "queryType": 0,
+                "resourceType": "microsoft.operationalinsights/workspaces",
+                "crossComponentResources": [
+                  "{Workspaces}"
+                ],
+                "visualization": "table",
+                "gridSettings": {
+                  "rowLimit": 500,
+                  "filter": true,
+                  "sortBy": [
+                    {
+                      "itemKey": "SoftwareType",
+                      "sortOrder": 1
+                    }
+                  ]
+                },
+                "sortBy": [
+                  {
+                    "itemKey": "SoftwareType",
+                    "sortOrder": 1
+                  }
+                ]
+              },
+              "name": "query - 5"
+            }
+          ]
+        },
+        "name": "Report"
+      }
+    ],
+    "fallbackResourceIds": [
+      "Azure Monitor"
+    ],
+    "$schema": "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json"
+  }
