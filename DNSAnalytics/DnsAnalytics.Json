@@ -1,0 +1,532 @@
+{
+    "version": "Notebook/1.0",
+    "items": [
+      {
+        "type": 1,
+        "content": {
+          "json": "# DNS Analytics"
+        },
+        "name": "text - 0"
+      },
+      {
+        "type": 9,
+        "content": {
+          "version": "KqlParameterItem/1.0",
+          "crossComponentResources": [
+            "{Subscriptions}"
+          ],
+          "parameters": [
+            {
+              "id": "ad793dc4-c4de-4a3a-aee0-7232b689aa1f",
+              "version": "KqlParameterItem/1.0",
+              "name": "DefaultSubscription_Internal",
+              "type": 1,
+              "query": "where type =~ 'microsoft.operationalinsights/workspaces'\r\n| take 1\r\n| project subscriptionId",
+              "isHiddenWhenLocked": true,
+              "timeContext": {
+                "durationMs": 86400000
+              },
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces"
+            },
+            {
+              "id": "9e7cb7dc-2a00-4e6e-ab69-a750e3545b99",
+              "version": "KqlParameterItem/1.0",
+              "name": "Subscriptions",
+              "type": 6,
+              "isRequired": true,
+              "multiSelect": true,
+              "quote": "'",
+              "delimiter": ",",
+              "query": "summarize by subscriptionId\r\n| project value = strcat(\"/subscriptions/\", subscriptionId), label = subscriptionId, selected = iff(subscriptionId =~ '{DefaultSubscription_Internal}', true, false)",
+              "crossComponentResources": [
+                "value::selected"
+              ],
+              "value": [
+                "/subscriptions/acb67c1b-8a90-4587-bebb-6e53cbdaeb0f"
+              ],
+              "typeSettings": {
+                "additionalResourceOptions": [
+                  "value::all"
+                ],
+                "showDefault": false
+              },
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources"
+            },
+            {
+              "id": "56cde915-d0c2-424c-8ab9-300c6e3a385b",
+              "version": "KqlParameterItem/1.0",
+              "name": "Help",
+              "label": "Documentation",
+              "type": 10,
+              "isRequired": true,
+              "typeSettings": {
+                "additionalResourceOptions": [],
+                "showDefault": false
+              },
+              "jsonData": "[\r\n    { \"value\":\"true\", \"label\":\"Show Help\" },\r\n    { \"value\":\"false\", \"label\":\"Hide Help\" },\r\n    { \"value\":\"changelog\", \"label\":\"Change Log\", \"selected\":true }\r\n]",
+              "timeContext": {
+                "durationMs": 86400000
+              },
+              "value": "false"
+            },
+            {
+              "id": "22697f3d-2d29-45bf-8fad-b92b7939c8f8",
+              "version": "KqlParameterItem/1.0",
+              "name": "Workspaces",
+              "type": 5,
+              "query": "where type =~ 'microsoft.operationalinsights/workspaces'\r\n| project id, selected = iff(id =~ todynamic('{DefaultSubscription_Internal}').ws, true, false), custId= properties.customerId",
+              "crossComponentResources": [
+                "{Subscriptions}"
+              ],
+              "value": "/subscriptions/acb67c1b-8a90-4587-bebb-6e53cbdaeb0f/resourceGroups/Sekerbank-RG/providers/Microsoft.OperationalInsights/workspaces/SekerBankOMS",
+              "typeSettings": {
+                "additionalResourceOptions": [
+                  "value::1"
+                ]
+              },
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources"
+            },
+            {
+              "id": "6b0e6062-5ce7-4054-ba25-8e44052ada67",
+              "version": "KqlParameterItem/1.0",
+              "name": "TimeRange",
+              "label": "Time Range",
+              "type": 4,
+              "typeSettings": {
+                "selectableValues": [
+                  {
+                    "durationMs": 300000
+                  },
+                  {
+                    "durationMs": 900000
+                  },
+                  {
+                    "durationMs": 1800000
+                  },
+                  {
+                    "durationMs": 3600000
+                  },
+                  {
+                    "durationMs": 14400000
+                  },
+                  {
+                    "durationMs": 43200000
+                  },
+                  {
+                    "durationMs": 86400000
+                  },
+                  {
+                    "durationMs": 172800000
+                  },
+                  {
+                    "durationMs": 259200000
+                  },
+                  {
+                    "durationMs": 604800000
+                  },
+                  {
+                    "durationMs": 1209600000
+                  },
+                  {
+                    "durationMs": 2419200000
+                  },
+                  {
+                    "durationMs": 2592000000
+                  },
+                  {
+                    "durationMs": 5184000000
+                  },
+                  {
+                    "durationMs": 7776000000
+                  }
+                ]
+              },
+              "value": {
+                "durationMs": 86400000
+              }
+            }
+          ],
+          "style": "pills",
+          "queryType": 1,
+          "resourceType": "microsoft.resourcegraph/resources"
+        },
+        "name": "parameters - 1"
+      },
+      {
+        "type": 1,
+        "content": {
+          "json": "# Help \r\n\r\n## Requirements\r\nChangeTracking solution needs to be enabled on related Log Analytics Workspace.\r\n\r\n\r\n## Limitations"
+        },
+        "conditionalVisibility": {
+          "parameterName": "Help",
+          "comparison": "isEqualTo",
+          "value": "true"
+        },
+        "name": "text - 2"
+      },
+      {
+        "type": 1,
+        "content": {
+          "json": "# Change Log\r\n- Added Parameters and Documentation"
+        },
+        "conditionalVisibility": {
+          "parameterName": "Help",
+          "comparison": "isEqualTo",
+          "value": "changelog"
+        },
+        "name": "text - 3"
+      },
+      {
+        "type": 11,
+        "content": {
+          "version": "LinkItem/1.0",
+          "style": "tabs",
+          "links": [
+            {
+              "id": "728d1be4-fa9d-4729-ab5f-ea4639748eaa",
+              "cellValue": "SelectedTab",
+              "linkTarget": "parameter",
+              "linkLabel": "DNS Lookup Queries",
+              "subTarget": "DNSLookupQueries",
+              "style": "link"
+            },
+            {
+              "id": "7d1dbc41-83ec-43ee-b1da-4b9aa2529b93",
+              "cellValue": "SelectedTab",
+              "linkTarget": "parameter",
+              "linkLabel": "DNS Lookup Failures",
+              "subTarget": "DNSLookupFailures",
+              "style": "link"
+            },
+            {
+              "id": "5003bb4d-26ed-485c-b20a-090d9ea07e8a",
+              "cellValue": "SelectedTab",
+              "linkTarget": "parameter",
+              "linkLabel": "Malicous IPS",
+              "subTarget": "MaliciousIPs",
+              "style": "link"
+            }
+          ]
+        },
+        "name": "links - 5"
+      },
+      {
+        "type": 12,
+        "content": {
+          "version": "NotebookGroup/1.0",
+          "groupType": "editable",
+          "items": [
+            {
+              "type": 3,
+              "content": {
+                "version": "KqlItem/1.0",
+                "query": "DnsEvents\r\n| where SubType == \"LookupQuery\"\r\n| summarize Count = count() by Name \r\n| sort by  Count desc \r\n| take 40",
+                "size": 0,
+                "title": "Top 40 Domain Names Queried",
+                "timeContext": {
+                  "durationMs": 0
+                },
+                "timeContextFromParameter": "TimeRange",
+                "exportFieldName": "Name",
+                "exportParameterName": "Name",
+                "exportDefaultValue": "\"\"",
+                "showExportToExcel": true,
+                "queryType": 0,
+                "resourceType": "microsoft.operationalinsights/workspaces",
+                "crossComponentResources": [
+                  "{Workspaces}"
+                ],
+                "visualization": "tiles",
+                "gridSettings": {
+                  "rowLimit": 10000
+                },
+                "tileSettings": {
+                  "showBorder": false,
+                  "titleContent": {
+                    "columnMatch": "Name",
+                    "formatter": 1
+                  },
+                  "leftContent": {
+                    "columnMatch": "Count",
+                    "formatter": 12,
+                    "formatOptions": {
+                      "palette": "auto"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "maximumSignificantDigits": 3,
+                        "maximumFractionDigits": 2
+                      }
+                    }
+                  }
+                }
+              },
+              "name": "query - 1"
+            },
+            {
+              "type": 3,
+              "content": {
+                "version": "KqlItem/1.0",
+                "query": "let ErrorTable = datatable (Code: string, Message: string ) \r\n[\r\n\"0\",\"Success\",\r\n\"1\",\"Format Error\",\r\n\"2\",\"Server Failure\",\r\n\"3\",\"Non-Existent Domain\",\r\n\"4\",\"Not Implemented\",\r\n\"5\",\"Query Refused\",\r\n\"6\",\"Name Exists when it should not\",\r\n\"7\",\"RR Set Exists when it should not\",\r\n\"8\",\"RR Set that should exist does not\",\r\n\"9\",\"Not Authorized\",\r\n\"10\",\"Name not contained in zone\",\r\n\"11\",\"DSO-TYPE Not Implemented\",\r\n\"16\",\"Bad OPT Version\",\r\n\"17\",\"TKey not recognized\",\r\n\"18\",\"Signature out of time window\",\r\n\"19\",\"Bad TKEY Mode\",\r\n\"20\",\"Algorithm not supported\",\r\n\"21\",\"The pipe has been ended.\",\r\n\"22\",\"Bad Truncation\",\r\n\"23\",\"Bad/missing Server Cookie\"\r\n];\r\nlet MessagesBag = toscalar (ErrorTable | extend p = pack(Code, Message) | summarize  dict = make_bag(p));\r\nDnsEvents\r\n| where SubType ==\"LookupQuery\"\r\n| where Name == \"{Name}\" or isempty(\"{Name}\")\r\n| summarize Count = count() by Name, ClientIP, Computer, QueryType,IPAddresses, ResultCode\r\n| extend Result = MessagesBag[tostring(ResultCode)]\r\n| project Count, Name, ClientIP, Computer, QueryType,IPAddresses, Result\r\n| sort by  Count desc ",
+                "size": 0,
+                "title": "Lookup Queries",
+                "timeContext": {
+                  "durationMs": 0
+                },
+                "timeContextFromParameter": "TimeRange",
+                "showExportToExcel": true,
+                "queryType": 0,
+                "resourceType": "microsoft.operationalinsights/workspaces",
+                "crossComponentResources": [
+                  "{Workspaces}"
+                ],
+                "gridSettings": {
+                  "rowLimit": 10000,
+                  "filter": true
+                }
+              },
+              "name": "query - 2"
+            }
+          ]
+        },
+        "conditionalVisibility": {
+          "parameterName": "SelectedTab",
+          "comparison": "isEqualTo",
+          "value": "DNSLookupQueries"
+        },
+        "name": "DNS Queries"
+      },
+      {
+        "type": 12,
+        "content": {
+          "version": "NotebookGroup/1.0",
+          "groupType": "editable",
+          "items": [
+            {
+              "type": 3,
+              "content": {
+                "version": "KqlItem/1.0",
+                "query": "let ErrorTable = datatable (Code: string, Message: string ) \r\n[\r\n\"0\",\"Success\",\r\n\"1\",\"Format Error\",\r\n\"2\",\"Server Failure\",\r\n\"3\",\"Non-Existent Domain\",\r\n\"4\",\"Not Implemented\",\r\n\"5\",\"Query Refused\",\r\n\"6\",\"Name Exists when it should not\",\r\n\"7\",\"RR Set Exists when it should not\",\r\n\"8\",\"RR Set that should exist does not\",\r\n\"9\",\"Not Authorized\",\r\n\"10\",\"Name not contained in zone\",\r\n\"11\",\"DSO-TYPE Not Implemented\",\r\n\"16\",\"Bad OPT Version\",\r\n\"17\",\"TKey not recognized\",\r\n\"18\",\"Signature out of time window\",\r\n\"19\",\"Bad TKEY Mode\",\r\n\"20\",\"Algorithm not supported\",\r\n\"21\",\"The pipe has been ended.\",\r\n\"22\",\"Bad Truncation\",\r\n\"23\",\"Bad/missing Server Cookie\"\r\n];\r\nlet MessagesBag = toscalar (ErrorTable | extend p = pack(Code, Message) | summarize  dict = make_bag(p));\r\nDnsEvents\r\n| where SubType ==\"LookupQuery\"\r\n| where ResultCode != \"0\"\r\n| extend Result = MessagesBag[tostring(ResultCode)]\r\n| summarize Count = count() by tostring(Result), ResultCode\r\n| sort by  Count desc ",
+                "size": 0,
+                "timeContext": {
+                  "durationMs": 0
+                },
+                "timeContextFromParameter": "TimeRange",
+                "exportFieldName": "ResultCode",
+                "exportParameterName": "ResultCode",
+                "exportDefaultValue": "\"\"",
+                "queryType": 0,
+                "resourceType": "microsoft.operationalinsights/workspaces",
+                "crossComponentResources": [
+                  "{Workspaces}"
+                ],
+                "visualization": "tiles",
+                "tileSettings": {
+                  "titleContent": {
+                    "columnMatch": "Result",
+                    "formatter": 1
+                  },
+                  "leftContent": {
+                    "columnMatch": "Count",
+                    "formatter": 12,
+                    "formatOptions": {
+                      "palette": "auto"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "maximumSignificantDigits": 3,
+                        "maximumFractionDigits": 2
+                      }
+                    }
+                  },
+                  "showBorder": false
+                }
+              },
+              "name": "query - 1"
+            },
+            {
+              "type": 3,
+              "content": {
+                "version": "KqlItem/1.0",
+                "query": "let ErrorTable = datatable (Code: string, Message: string ) \r\n[\r\n\"0\",\"Success\",\r\n\"1\",\"Format Error\",\r\n\"2\",\"Server Failure\",\r\n\"3\",\"Non-Existent Domain\",\r\n\"4\",\"Not Implemented\",\r\n\"5\",\"Query Refused\",\r\n\"6\",\"Name Exists when it should not\",\r\n\"7\",\"RR Set Exists when it should not\",\r\n\"8\",\"RR Set that should exist does not\",\r\n\"9\",\"Not Authorized\",\r\n\"10\",\"Name not contained in zone\",\r\n\"11\",\"DSO-TYPE Not Implemented\",\r\n\"16\",\"Bad OPT Version\",\r\n\"17\",\"TKey not recognized\",\r\n\"18\",\"Signature out of time window\",\r\n\"19\",\"Bad TKEY Mode\",\r\n\"20\",\"Algorithm not supported\",\r\n\"21\",\"The pipe has been ended.\",\r\n\"22\",\"Bad Truncation\",\r\n\"23\",\"Bad/missing Server Cookie\"\r\n];\r\nlet MessagesBag = toscalar (ErrorTable | extend p = pack(Code, Message) | summarize  dict = make_bag(p));\r\nDnsEvents\r\n| where ResultCode == \"{ResultCode}\" or isempty(\"{ResultCode}\")\r\n| extend Result = MessagesBag[tostring(ResultCode)]\r\n| project TimeGenerated, Computer, ClientIP, Name, QueryType, Result\r\n",
+                "size": 0,
+                "timeContext": {
+                  "durationMs": 0
+                },
+                "timeContextFromParameter": "TimeRange",
+                "queryType": 0,
+                "resourceType": "microsoft.operationalinsights/workspaces",
+                "crossComponentResources": [
+                  "{Workspaces}"
+                ],
+                "visualization": "table",
+                "gridSettings": {
+                  "rowLimit": 10000,
+                  "filter": true
+                }
+              },
+              "name": "query - 1"
+            }
+          ]
+        },
+        "conditionalVisibility": {
+          "parameterName": "SelectedTab",
+          "comparison": "isEqualTo",
+          "value": "DNSLookupFailures"
+        },
+        "name": "DNS Lookup Failures"
+      },
+      {
+        "type": 12,
+        "content": {
+          "version": "NotebookGroup/1.0",
+          "groupType": "editable",
+          "items": [
+            {
+              "type": 3,
+              "content": {
+                "version": "KqlItem/1.0",
+                "query": "DnsEvents\r\n| where SubType == 'LookupQuery' and isnotempty(MaliciousIP)\r\n| summarize Attempts = count() by Name",
+                "size": 0,
+                "title": "Attempts by Name",
+                "timeContext": {
+                  "durationMs": 0
+                },
+                "timeContextFromParameter": "TimeRange",
+                "exportFieldName": "Name",
+                "exportParameterName": "Name",
+                "exportDefaultValue": "\"\"",
+                "queryType": 0,
+                "resourceType": "microsoft.operationalinsights/workspaces",
+                "crossComponentResources": [
+                  "{Workspaces}"
+                ],
+                "visualization": "tiles",
+                "gridSettings": {
+                  "filter": true
+                },
+                "tileSettings": {
+                  "titleContent": {
+                    "columnMatch": "Name",
+                    "formatter": 1
+                  },
+                  "leftContent": {
+                    "columnMatch": "Attempts",
+                    "formatter": 12,
+                    "formatOptions": {
+                      "palette": "auto"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "maximumSignificantDigits": 3,
+                        "maximumFractionDigits": 2
+                      }
+                    }
+                  },
+                  "showBorder": false
+                }
+              },
+              "customWidth": "50",
+              "name": "query - 8"
+            },
+            {
+              "type": 3,
+              "content": {
+                "version": "KqlItem/1.0",
+                "query": "DnsEvents\r\n| where SubType == 'LookupQuery' and isnotempty(MaliciousIP)\r\n| summarize Attempts = count() by ClientIP",
+                "size": 0,
+                "title": "Attempts by ClientIP",
+                "timeContext": {
+                  "durationMs": 0
+                },
+                "timeContextFromParameter": "TimeRange",
+                "exportFieldName": "ClientIP",
+                "exportParameterName": "ClientIP",
+                "exportDefaultValue": "\"\"",
+                "queryType": 0,
+                "resourceType": "microsoft.operationalinsights/workspaces",
+                "crossComponentResources": [
+                  "{Workspaces}"
+                ],
+                "visualization": "tiles",
+                "tileSettings": {
+                  "titleContent": {
+                    "columnMatch": "ClientIP",
+                    "formatter": 1
+                  },
+                  "leftContent": {
+                    "columnMatch": "Attempts",
+                    "formatter": 12,
+                    "formatOptions": {
+                      "palette": "auto"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "maximumSignificantDigits": 3,
+                        "maximumFractionDigits": 2
+                      }
+                    }
+                  },
+                  "showBorder": false
+                }
+              },
+              "customWidth": "50",
+              "name": "query - 8"
+            },
+            {
+              "type": 3,
+              "content": {
+                "version": "KqlItem/1.0",
+                "query": "let ErrorTable = datatable (Code: string, Message: string ) \r\n[\r\n\"0\",\"Success\",\r\n\"1\",\"Format Error\",\r\n\"2\",\"Server Failure\",\r\n\"3\",\"Non-Existent Domain\",\r\n\"4\",\"Not Implemented\",\r\n\"5\",\"Query Refused\",\r\n\"6\",\"Name Exists when it should not\",\r\n\"7\",\"RR Set Exists when it should not\",\r\n\"8\",\"RR Set that should exist does not\",\r\n\"9\",\"Not Authorized\",\r\n\"10\",\"Name not contained in zone\",\r\n\"11\",\"DSO-TYPE Not Implemented\",\r\n\"16\",\"Bad OPT Version\",\r\n\"17\",\"TKey not recognized\",\r\n\"18\",\"Signature out of time window\",\r\n\"19\",\"Bad TKEY Mode\",\r\n\"20\",\"Algorithm not supported\",\r\n\"21\",\"The pipe has been ended.\",\r\n\"22\",\"Bad Truncation\",\r\n\"23\",\"Bad/missing Server Cookie\"\r\n];\r\nlet MessagesBag = toscalar (ErrorTable | extend p = pack(Code, Message) | summarize  dict = make_bag(p));\r\nDnsEvents\r\n| where SubType == 'LookupQuery' and isnotempty(MaliciousIP)\r\n| where ClientIP == \"{ClientIP}\" or isempty(\"{ClientIP}\")\r\n| where Name == \"{Name}\" or isempty(\"{Name}\")\r\n| extend Result = MessagesBag[tostring(ResultCode)]\r\n| project Computer, ClientIP, Name, QueryType, TimeGenerated, Result, IPAddresses, IndicatorThreatType, Confidence, Severity, RemoteIPLongitude, RemoteIPLatitude, RemoteIPCountry\r\n",
+                "size": 0,
+                "timeContext": {
+                  "durationMs": 0
+                },
+                "timeContextFromParameter": "TimeRange",
+                "queryType": 0,
+                "resourceType": "microsoft.operationalinsights/workspaces",
+                "crossComponentResources": [
+                  "{Workspaces}"
+                ],
+                "visualization": "table",
+                "gridSettings": {
+                  "rowLimit": 10000,
+                  "filter": true,
+                  "sortBy": [
+                    {
+                      "itemKey": "IPAddresses",
+                      "sortOrder": 1
+                    }
+                  ]
+                },
+                "sortBy": [
+                  {
+                    "itemKey": "IPAddresses",
+                    "sortOrder": 1
+                  }
+                ]
+              },
+              "name": "query - 8"
+            }
+          ]
+        },
+        "conditionalVisibility": {
+          "parameterName": "SelectedTab",
+          "comparison": "isEqualTo",
+          "value": "MaliciousIPs"
+        },
+        "name": "MaliciousIPs"
+      }
+    ],
+    "fallbackResourceIds": [
+      "Azure Monitor"
+    ],
+    "$schema": "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json"
+  }
