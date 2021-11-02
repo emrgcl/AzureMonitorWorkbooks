@@ -1,0 +1,7 @@
+let lastSample
+let Threshold = 60;
+Perf
+| where  ObjectName  == "Processor" and CounterName in ("% Processor Time")
+| where TimeGenerated  >= ago(1h)
+| summarize Maximum=max(CounterValue),Mininum = min(CounterValue),Avarage = avg(CounterValue),SampleCount=count() by bin(TimeGenerated,15min),Computer
+| where Avarage >= Threshold

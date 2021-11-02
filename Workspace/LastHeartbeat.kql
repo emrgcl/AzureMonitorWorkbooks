@@ -1,0 +1,12 @@
+// heartbeat of each computers
+let GetTimeSinceLastHB=(TimeSinceLastHB:long){
+case(TimeSinceLastHB >= 1440, strcat(tostring(TimeSinceLastHB/1440), " days"),
+TimeSinceLastHB between (60 .. 1439), strcat(tostring(TimeSinceLastHB/60), " hours"),
+strcat(tostring(TimeSinceLastHB), " minutes"))
+//iif(TimeSinceLastHB >= 1440,strcat(tostring(TimeSinceLastHB/24), " days"), strcat(tostring(TimeSinceLastHB), " Minutes"))
+};
+Heartbeat
+| summarize arg_max(TimeGenerated, *)  by Computer
+| extend MinutesSinceLastHB = datetime_diff('Minute',now(),TimeGenerated)
+| extend TimeSinceLastHB = GetTimeSinceLastHB(MinutesSinceLastHB)
+|project  Computer, TimeGenerated,MinutesSinceLastHB,TimeSinceLastHB
