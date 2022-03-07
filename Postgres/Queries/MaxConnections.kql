@@ -1,0 +1,6 @@
+//	Max Connections
+InsightsMetrics
+| where Name == 'pg_settings_max_connections'
+| extend Tags = parse_json(Tags)
+| project  Name, Val , ClusterName = tostring(Tags.["container.azm.ms/clusterName"]), Server = tostring(Tags.server), TimeGenerated
+| summarize arg_max(TimeGenerated,*) by ClusterName,Name,Server,Val

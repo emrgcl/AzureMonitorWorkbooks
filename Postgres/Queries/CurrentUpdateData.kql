@@ -1,0 +1,8 @@
+//	Number of rows updated by queries in this database
+let DatabaseName = 'postgres_air';
+InsightsMetrics
+| where Name == 'pg_stat_database_tup_updated'
+| extend Tags = parse_json(Tags)
+| project  Database = tostring(Tags.datname), Name, Val , ClusterName = tostring(Tags.["container.azm.ms/clusterName"]), Server = tostring(Tags.server)
+| where Database == DatabaseName or isempty(DatabaseName)
+| summarize Sum = sum(Val) by ClusterName,Name,Server,Database

@@ -1,0 +1,7 @@
+//Number of rows fetched by queries
+// default needs to show the sum
+
+InsightsMetrics
+| where Name == 'pg_stat_database_tup_fetched'
+| extend Tags = parse_json(Tags)
+| project  Database = tostring(Tags.datname), Name, Val , ClusterName = tostring(Tags.["container.azm.ms/clusterName"]), Server = tostring(Tags.server)

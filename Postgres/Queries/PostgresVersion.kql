@@ -1,0 +1,6 @@
+//Postgres Version
+InsightsMetrics
+| where Name  == "pg_static"
+| extend Tags = parse_json(Tags)
+| project Pod=Computer,ShortVersion = tostring(Tags.short_version), Version = tostring(Tags.version),TimeGenerated
+| summarize arg_max(TimeGenerated,*) by Pod,ShortVersion,Version
