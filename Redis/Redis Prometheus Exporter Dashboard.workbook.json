@@ -1,0 +1,685 @@
+{
+  "version": "Notebook/1.0",
+  "items": [
+    {
+      "type": 1,
+      "content": {
+        "json": "# Redis Dashboard for Prometheus Exporter "
+      },
+      "name": "text - 0"
+    },
+    {
+      "type": 9,
+      "content": {
+        "version": "KqlParameterItem/1.0",
+        "crossComponentResources": [
+          "{Workspaces}"
+        ],
+        "parameters": [
+          {
+            "id": "ad793dc4-c4de-4a3a-aee0-7232b689aa1f",
+            "version": "KqlParameterItem/1.0",
+            "name": "DefaultSubscription_Internal",
+            "type": 1,
+            "query": "where type =~ 'microsoft.operationalinsights/workspaces'\r\n| take 1\r\n| project subscriptionId",
+            "isHiddenWhenLocked": true,
+            "timeContext": {
+              "durationMs": 86400000
+            },
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces"
+          },
+          {
+            "id": "9e7cb7dc-2a00-4e6e-ab69-a750e3545b99",
+            "version": "KqlParameterItem/1.0",
+            "name": "Subscriptions",
+            "type": 6,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "summarize by subscriptionId\r\n| project value = strcat(\"/subscriptions/\", subscriptionId), label = subscriptionId, selected = iff(subscriptionId =~ '{DefaultSubscription_Internal}', true, false)",
+            "crossComponentResources": [
+              "value::selected"
+            ],
+            "value": [
+              "/subscriptions/ca9a785d-9cb0-44cb-87a3-6cf3b667c71e"
+            ],
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
+            "id": "56cde915-d0c2-424c-8ab9-300c6e3a385b",
+            "version": "KqlParameterItem/1.0",
+            "name": "Help",
+            "label": "Documentation",
+            "type": 10,
+            "isRequired": true,
+            "typeSettings": {
+              "additionalResourceOptions": [],
+              "showDefault": false
+            },
+            "jsonData": "[\r\n    { \"value\":\"true\", \"label\":\"Show Help\" },\r\n    { \"value\":\"false\", \"label\":\"Hide Help\" },\r\n    { \"value\":\"changelog\", \"label\":\"Change Log\", \"selected\":true }\r\n]",
+            "timeContext": {
+              "durationMs": 86400000
+            }
+          },
+          {
+            "id": "22697f3d-2d29-45bf-8fad-b92b7939c8f8",
+            "version": "KqlParameterItem/1.0",
+            "name": "Workspaces",
+            "type": 5,
+            "query": "where type =~ 'microsoft.operationalinsights/workspaces'\r\n| project id, selected = iff(id =~ todynamic('{DefaultSubscription_Internal}').ws, true, false), custId= properties.customerId",
+            "crossComponentResources": [
+              "{Subscriptions}"
+            ],
+            "value": "/subscriptions/ca9a785d-9cb0-44cb-87a3-6cf3b667c71e/resourceGroups/fxtrading/providers/Microsoft.OperationalInsights/workspaces/fxtrading-loganalytics",
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::1"
+              ]
+            },
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
+            "id": "6b0e6062-5ce7-4054-ba25-8e44052ada67",
+            "version": "KqlParameterItem/1.0",
+            "name": "TimeRange",
+            "label": "Time Range",
+            "type": 4,
+            "typeSettings": {
+              "selectableValues": [
+                {
+                  "durationMs": 300000
+                },
+                {
+                  "durationMs": 900000
+                },
+                {
+                  "durationMs": 1800000
+                },
+                {
+                  "durationMs": 3600000
+                },
+                {
+                  "durationMs": 14400000
+                },
+                {
+                  "durationMs": 43200000
+                },
+                {
+                  "durationMs": 86400000
+                },
+                {
+                  "durationMs": 172800000
+                },
+                {
+                  "durationMs": 259200000
+                },
+                {
+                  "durationMs": 604800000
+                },
+                {
+                  "durationMs": 1209600000
+                },
+                {
+                  "durationMs": 2419200000
+                },
+                {
+                  "durationMs": 2592000000
+                },
+                {
+                  "durationMs": 5184000000
+                },
+                {
+                  "durationMs": 7776000000
+                }
+              ]
+            },
+            "value": {
+              "durationMs": 86400000
+            }
+          },
+          {
+            "id": "fc437de9-e97b-46e6-8e46-c9d99ebf37a1",
+            "version": "KqlParameterItem/1.0",
+            "name": "TimeSlice",
+            "type": 10,
+            "description": "Time Slice option",
+            "isRequired": true,
+            "typeSettings": {
+              "additionalResourceOptions": [],
+              "showDefault": false
+            },
+            "jsonData": "[\r\n    { \"value\":\"1min\", \"label\":\"1 minute\" },\r\n    { \"value\":\"5min\", \"label\":\"5 minutes\" },\r\n    { \"value\":\"10min\", \"label\":\"10 minutes\" },\r\n    { \"value\":\"15min\", \"label\":\"15 minutes\", \"selected\":true },\r\n    { \"value\":\"1h\", \"label\":\"1 hour\"},\r\n    { \"value\":\"1d\", \"label\":\"1 day\"}\r\n]",
+            "value": "1min"
+          },
+          {
+            "id": "405c147c-6ec1-4b9d-8908-cce3d02b32e6",
+            "version": "KqlParameterItem/1.0",
+            "name": "Computer",
+            "type": 1,
+            "isHiddenWhenLocked": true,
+            "criteriaData": [
+              {
+                "criteriaContext": {
+                  "operator": "Default",
+                  "resultValType": "static",
+                  "resultVal": "null"
+                }
+              }
+            ]
+          },
+          {
+            "id": "8364b9bf-cd8a-4e41-bfb2-c2f122ad7f93",
+            "version": "KqlParameterItem/1.0",
+            "name": "RedisPod",
+            "label": "Redis Pod",
+            "type": 1,
+            "isRequired": true,
+            "query": "InsightsMetrics\r\n| where Namespace contains \"Prometheus\"\r\n| where Name contains \"redis\"\r\n| distinct Computer",
+            "crossComponentResources": [
+              "{Workspaces}"
+            ],
+            "timeContext": {
+              "durationMs": 0
+            },
+            "timeContextFromParameter": "TimeRange",
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces"
+          }
+        ],
+        "style": "pills",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces"
+      },
+      "name": "parameters - 1"
+    },
+    {
+      "type": 1,
+      "content": {
+        "json": "# Help \r\n\r\n## Summary\r\nAzure Monitor Workbook to reflect the Prometheus exporter for Redis Dashboard based on Graphana."
+      },
+      "conditionalVisibility": {
+        "parameterName": "Help",
+        "comparison": "isEqualTo",
+        "value": "true"
+      },
+      "name": "text - 2"
+    },
+    {
+      "type": 1,
+      "content": {
+        "json": "# Change Log\r\n- Release date: 13/01/2022"
+      },
+      "conditionalVisibility": {
+        "parameterName": "Help",
+        "comparison": "isEqualTo",
+        "value": "changelog"
+      },
+      "name": "text - 3"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "items": [
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "let TimeSlice = {TimeSlice};\r\nlet Instance = \"{RedisPod}\";\r\nlet Metric = 'redis_uptime_in_seconds';\r\nInsightsMetrics\r\n| where Computer == Instance\r\n| where Namespace  contains  'prometheus'\r\n| where Name == 'redis_uptime_in_seconds'\r\n| summarize Maximum = round(max(Val)),SampleCount=count() by bin(TimeGenerated,TimeSlice),Computer\r\n| top-nested of Computer by dummy0=max(2), top-nested 1 of TimeGenerated by dummy1=max(TimeGenerated), top-nested of Maximum by dummy2=max(2)\r\n| project-away  dummy0,dummy1,dummy2\r\n| extend Counter = \"Uptime\"\r\n",
+              "size": 0,
+              "title": "Uptime",
+              "timeContext": {
+                "durationMs": 86400000
+              },
+              "timeContextFromParameter": "TimeRange",
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{Workspaces}"
+              ],
+              "visualization": "graph",
+              "graphSettings": {
+                "type": 2,
+                "topContent": {
+                  "columnMatch": "Counter",
+                  "formatter": 1
+                },
+                "centerContent": {
+                  "columnMatch": "Maximum",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "palette": "none"
+                  },
+                  "numberFormat": {
+                    "unit": 24,
+                    "options": {
+                      "style": "decimal",
+                      "maximumFractionDigits": 2,
+                      "maximumSignificantDigits": 3
+                    }
+                  }
+                },
+                "bottomContent": {
+                  "columnMatch": "Computer"
+                },
+                "nodeIdField": "Computer",
+                "graphOrientation": 3,
+                "showOrientationToggles": false,
+                "nodeSize": null,
+                "staticNodeSize": 100,
+                "colorSettings": null,
+                "hivesMargin": 5
+              }
+            },
+            "customWidth": "33",
+            "showPin": true,
+            "name": "query - 0"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "let TimeSlice = {TimeSlice};\r\nlet Instance = \"{RedisPod}\";\r\nlet Metric = 'redis_connected_clients';\r\nInsightsMetrics\r\n| where Computer == Instance\r\n| where Namespace  contains  'prometheus'\r\n| where Name == Metric\r\n| summarize Maximum = round(max(Val)),SampleCount=count() by bin(TimeGenerated,TimeSlice),Computer\r\n| top-nested of Computer by dummy0=max(2), top-nested 1 of TimeGenerated by dummy1=max(TimeGenerated), top-nested of Maximum by dummy2=max(2)\r\n| project-away  dummy0,dummy1,dummy2\r\n| extend Counter = \"Connected Clients\"",
+              "size": 0,
+              "title": "Connected Clients",
+              "timeContext": {
+                "durationMs": 86400000
+              },
+              "timeContextFromParameter": "TimeRange",
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{Workspaces}"
+              ],
+              "visualization": "graph",
+              "graphSettings": {
+                "type": 2,
+                "topContent": {
+                  "columnMatch": "Counter",
+                  "formatter": 1
+                },
+                "centerContent": {
+                  "columnMatch": "Maximum",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "palette": "none"
+                  },
+                  "numberFormat": {
+                    "unit": 17,
+                    "options": {
+                      "style": "decimal",
+                      "maximumFractionDigits": 2,
+                      "maximumSignificantDigits": 3
+                    }
+                  }
+                },
+                "bottomContent": {
+                  "columnMatch": "Computer"
+                },
+                "nodeIdField": "Computer",
+                "graphOrientation": 3,
+                "showOrientationToggles": false,
+                "nodeSize": null,
+                "staticNodeSize": 100,
+                "colorSettings": null,
+                "hivesMargin": 5
+              }
+            },
+            "customWidth": "33",
+            "showPin": true,
+            "name": "query - 1"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "let TimeSlice = {TimeSlice};\r\nlet Instance = \"{RedisPod}\";\r\nlet UsedBytesMetric = 'redis_memory_used_bytes';\r\nlet MaxMemoryMetric = 'redis_memory_max_bytes';\r\nlet MaxMemory = toscalar(InsightsMetrics\r\n| where Computer == Instance\r\n| where Namespace  contains  'prometheus'\r\n| where Name == MaxMemoryMetric\r\n| summarize Maximum = round(max(Val)),SampleCount=count() by bin(TimeGenerated,TimeSlice),Computer\r\n| top-nested of Computer by dummy0=max(2), top-nested 1 of TimeGenerated by dummy1=max(TimeGenerated), top-nested of Maximum by dummy2=max(2)\r\n| project-away  dummy0,dummy1,dummy2\r\n| project Maximum);\r\nlet UsedBytes = toscalar(InsightsMetrics\r\n| where Computer == Instance\r\n| where Namespace  contains  'prometheus'\r\n| where Name == UsedBytesMetric\r\n| summarize Maximum = round(max(Val)),SampleCount=count() by bin(TimeGenerated,TimeSlice),Computer\r\n| top-nested of Computer by dummy0=max(2), top-nested 1 of TimeGenerated by dummy1=max(TimeGenerated), top-nested of Maximum by dummy2=max(2)\r\n| project-away  dummy0,dummy1,dummy2\r\n| project Maximum);\r\nprint PercentMemory = UsedBytes / MaxMemory * 100, Inst = Instance, Counter = 'Percent Memory Used'",
+              "size": 0,
+              "title": "Memory Usage Percent",
+              "timeContext": {
+                "durationMs": 86400000
+              },
+              "timeContextFromParameter": "TimeRange",
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{Workspaces}"
+              ],
+              "visualization": "graph",
+              "graphSettings": {
+                "type": 2,
+                "topContent": {
+                  "columnMatch": "Counter",
+                  "formatter": 1
+                },
+                "centerContent": {
+                  "columnMatch": "PercentMemory",
+                  "formatter": 1,
+                  "numberFormat": {
+                    "unit": 1,
+                    "options": {
+                      "style": "decimal",
+                      "maximumFractionDigits": 2,
+                      "maximumSignificantDigits": 3
+                    }
+                  }
+                },
+                "bottomContent": {
+                  "columnMatch": "Inst"
+                },
+                "nodeIdField": "Inst",
+                "graphOrientation": 3,
+                "showOrientationToggles": false,
+                "nodeSize": null,
+                "staticNodeSize": 100,
+                "colorSettings": {
+                  "nodeColorField": "PercentMemory",
+                  "type": 4,
+                  "heatmapPalette": "greenRed",
+                  "heatmapMin": null,
+                  "heatmapMax": null
+                },
+                "hivesMargin": 5
+              }
+            },
+            "customWidth": "30",
+            "showPin": true,
+            "name": "query - 2"
+          }
+        ]
+      },
+      "name": "group - 4"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "items": [
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "let TimeSlice = {TimeSlice};\r\nlet Instance = \"{RedisPod}\";\r\nlet Metric = 'redis_commands_processed_total';\r\nInsightsMetrics\r\n| where Computer == Instance\r\n| where Namespace  contains  'prometheus'\r\n| where Name == Metric\r\n| summarize Avarage = round(avg(Val)) by bin(TimeGenerated,TimeSlice),Computer\r\n",
+              "size": 0,
+              "aggregation": 5,
+              "title": "Command executed / Seconds",
+              "timeContext": {
+                "durationMs": 86400000
+              },
+              "timeContextFromParameter": "TimeRange",
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{Workspaces}"
+              ],
+              "visualization": "linechart",
+              "chartSettings": {
+                "group": "Computer",
+                "createOtherGroup": null
+              }
+            },
+            "customWidth": "50",
+            "showPin": true,
+            "name": "Command executed seconds"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "let TimeSlice = {TimeSlice};\r\nlet Instance = \"{RedisPod}\";\r\nInsightsMetrics\r\n| where Computer == Instance\r\n| where Namespace  contains  'prometheus'\r\n| where Name in ('redis_keyspace_hits_total','redis_keyspace_misses_total')\r\n| summarize Avarage = round(avg(Val)) by bin(TimeGenerated,TimeSlice),Computer,Name",
+              "size": 0,
+              "aggregation": 5,
+              "title": "Hit / Misses per Sec",
+              "timeContext": {
+                "durationMs": 86400000
+              },
+              "timeContextFromParameter": "TimeRange",
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{Workspaces}"
+              ],
+              "visualization": "linechart",
+              "chartSettings": {
+                "group": "Name",
+                "createOtherGroup": null,
+                "showLegend": true
+              }
+            },
+            "customWidth": "50",
+            "showPin": true,
+            "name": "hit misses"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "let TimeSlice = {TimeSlice};\r\nlet Instance = \"{RedisPod}\";\r\nInsightsMetrics\r\n| where Computer == Instance\r\n| where Namespace  contains  'prometheus'\r\n| where Name in ('redis_memory_used_bytes','redis_memory_max_bytes')\r\n| summarize Avarage = round(avg(Val)) by bin(TimeGenerated,TimeSlice),Computer,Name",
+              "size": 0,
+              "aggregation": 5,
+              "title": "Percent Memory Used",
+              "timeContext": {
+                "durationMs": 86400000
+              },
+              "timeContextFromParameter": "TimeRange",
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{Workspaces}"
+              ],
+              "visualization": "linechart",
+              "chartSettings": {
+                "yAxis": [
+                  "Avarage"
+                ],
+                "group": "Name",
+                "createOtherGroup": null,
+                "showLegend": true,
+                "ySettings": {
+                  "numberFormatSettings": {
+                    "unit": 36,
+                    "options": {
+                      "style": "decimal",
+                      "useGrouping": true
+                    }
+                  }
+                }
+              }
+            },
+            "customWidth": "50",
+            "showPin": true,
+            "name": "query - 2"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "let TimeSlice = {TimeSlice};\r\nlet Instance = \"{RedisPod}\";\r\n//Metrics = ('redis_keyspace_hits_total','edis_keyspace_misses_total');\r\nInsightsMetrics\r\n| where Computer == Instance\r\n| where Namespace  contains  'prometheus'\r\n| where Name in ('redis_net_input_bytes_total','redis_net_output_bytes_total')\r\n| summarize Avarage = round(avg(Val)) by bin(TimeGenerated,TimeSlice),Computer,Name\r\n",
+              "size": 0,
+              "aggregation": 5,
+              "title": "Network I/O",
+              "timeContext": {
+                "durationMs": 86400000
+              },
+              "timeContextFromParameter": "TimeRange",
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{Workspaces}"
+              ],
+              "visualization": "linechart",
+              "chartSettings": {
+                "yAxis": [
+                  "Avarage"
+                ],
+                "group": "Name",
+                "createOtherGroup": null,
+                "ySettings": {
+                  "numberFormatSettings": {
+                    "unit": 36,
+                    "options": {
+                      "style": "decimal",
+                      "useGrouping": true
+                    }
+                  }
+                }
+              }
+            },
+            "customWidth": "50",
+            "showPin": true,
+            "name": "query - 3"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "let TimeSlice = {TimeSlice};\r\nlet Instance = \"{RedisPod}\";\r\nlet Metric = 'redis_db_keys';\r\nInsightsMetrics\r\n| where Computer == Instance\r\n| where Namespace  contains  'prometheus'\r\n| where Name == Metric\r\n| extend tags = parse_json(Tags)\r\n| extend db = tostring(tags.db)\r\n| summarize Maximum = round(max(Val)) by bin(TimeGenerated,TimeSlice),Computer,Name,db\r\n| order by Maximum desc \r\n",
+              "size": 0,
+              "aggregation": 5,
+              "title": "Total Items per DB",
+              "timeContext": {
+                "durationMs": 86400000
+              },
+              "timeContextFromParameter": "TimeRange",
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{Workspaces}"
+              ],
+              "visualization": "linechart",
+              "chartSettings": {
+                "group": "db",
+                "createOtherGroup": null,
+                "showLegend": true
+              }
+            },
+            "customWidth": "50",
+            "showPin": true,
+            "name": "query - 4"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "let TimeSlice = {TimeSlice};\r\nlet Instance = \"{RedisPod}\";\r\nInsightsMetrics\r\n| where Computer == Instance\r\n| where Namespace  contains  'prometheus'\r\n| where Name in ('redis_db_keys','redis_db_keys_expiring')\r\n| extend tags = parse_json(Tags)\r\n| extend db = tostring(tags.db)\r\n| summarize avg = round(avg(Val)) by bin(TimeGenerated,TimeSlice),Computer,Name,db\r\n| summarize sum = sum(avg) by TimeGenerated, Computer, Name",
+              "size": 0,
+              "aggregation": 5,
+              "title": "Expiring vs Not-Expiring Keys",
+              "timeContext": {
+                "durationMs": 86400000
+              },
+              "timeContextFromParameter": "TimeRange",
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{Workspaces}"
+              ],
+              "visualization": "linechart",
+              "chartSettings": {
+                "group": "Name",
+                "createOtherGroup": null
+              }
+            },
+            "customWidth": "50",
+            "showPin": true,
+            "name": "query - 5"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "let TimeSlice = {TimeSlice};\r\nlet Instance = \"{RedisPod}\";\r\n//let Metrics = ('redis_keyspace_hits_total','edis_keyspace_misses_total');\r\nInsightsMetrics\r\n| where Computer == Instance\r\n| where Namespace  contains  'prometheus'\r\n| where Name in ('redis_expired_keys_total','redis_evicted_keys_total')\r\n| summarize Avarage = round(avg(Val)) by bin(TimeGenerated,TimeSlice),Computer,Name\r\n",
+              "size": 0,
+              "aggregation": 5,
+              "title": "Expired / Evicted",
+              "timeContext": {
+                "durationMs": 86400000
+              },
+              "timeContextFromParameter": "TimeRange",
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{Workspaces}"
+              ],
+              "visualization": "linechart",
+              "chartSettings": {
+                "group": "Name",
+                "createOtherGroup": null
+              }
+            },
+            "customWidth": "50",
+            "showPin": true,
+            "name": "query - 6"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "let TimeSlice = {TimeSlice};\r\nlet Instance = \"{RedisPod}\";\r\nInsightsMetrics\r\n| where Computer == Instance\r\n| where Namespace  contains  'prometheus'\r\n| where Name == 'redis_commands_total'\r\n| extend tags = parse_json(Tags)\r\n| extend cmd = tostring(tags.cmd)\r\n| summarize Avarage = round(avg(Val)) by bin(TimeGenerated,TimeSlice),Computer,Name, cmd",
+              "size": 0,
+              "aggregation": 5,
+              "title": "Command Calls / Sec",
+              "timeContext": {
+                "durationMs": 86400000
+              },
+              "timeContextFromParameter": "TimeRange",
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{Workspaces}"
+              ],
+              "visualization": "linechart",
+              "chartSettings": {
+                "group": "cmd",
+                "createOtherGroup": null,
+                "showLegend": true
+              }
+            },
+            "customWidth": "50",
+            "showPin": true,
+            "name": "query - 7"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "let TimeSlice = {TimeSlice};\r\nlet Instance = \"{RedisPod}\";\r\nlet Metric = 'redis_connected_clients';\r\nInsightsMetrics\r\n| where Computer == Instance\r\n| where Namespace  contains  'prometheus'\r\n| where Name == Metric\r\n| summarize Maximum = round(max(Val)),SampleCount=count() by bin(TimeGenerated,TimeSlice),Computer",
+              "size": 0,
+              "aggregation": 5,
+              "title": "Redis Connected Clients",
+              "timeContext": {
+                "durationMs": 86400000
+              },
+              "timeContextFromParameter": "TimeRange",
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "/subscriptions/ca9a785d-9cb0-44cb-87a3-6cf3b667c71e/resourceGroups/fxtrading/providers/Microsoft.OperationalInsights/workspaces/fxtrading-loganalytics"
+              ],
+              "visualization": "linechart"
+            },
+            "showPin": true,
+            "name": "query - 8"
+          }
+        ]
+      },
+      "name": "group - 5"
+    }
+  ],
+  "fallbackResourceIds": [
+    "Azure Monitor"
+  ],
+  "$schema": "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json"
+}

@@ -1,0 +1,1104 @@
+{
+    "version": "Notebook/1.0",
+    "items": [
+      {
+        "type": 1,
+        "content": {
+          "json": "# Server Performance Dashboard"
+        },
+        "name": "text - 0"
+      },
+      {
+        "type": 9,
+        "content": {
+          "version": "KqlParameterItem/1.0",
+          "parameters": [
+            {
+              "id": "ad793dc4-c4de-4a3a-aee0-7232b689aa1f",
+              "version": "KqlParameterItem/1.0",
+              "name": "DefaultSubscription_Internal",
+              "type": 1,
+              "query": "where type =~ 'microsoft.operationalinsights/workspaces'\r\n| take 1\r\n| project subscriptionId",
+              "isHiddenWhenLocked": true,
+              "timeContext": {
+                "durationMs": 86400000
+              },
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces"
+            },
+            {
+              "id": "9e7cb7dc-2a00-4e6e-ab69-a750e3545b99",
+              "version": "KqlParameterItem/1.0",
+              "name": "Subscriptions",
+              "type": 6,
+              "isRequired": true,
+              "multiSelect": true,
+              "quote": "'",
+              "delimiter": ",",
+              "query": "summarize by subscriptionId\r\n| project value = strcat(\"/subscriptions/\", subscriptionId), label = subscriptionId, selected = iff(subscriptionId =~ '{DefaultSubscription_Internal}', true, false)",
+              "crossComponentResources": [
+                "value::selected"
+              ],
+              "value": [
+                "/subscriptions/69403112-e3c9-442d-bcb4-283e32740268"
+              ],
+              "typeSettings": {
+                "additionalResourceOptions": [
+                  "value::all"
+                ],
+                "showDefault": false
+              },
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources"
+            },
+            {
+              "id": "56cde915-d0c2-424c-8ab9-300c6e3a385b",
+              "version": "KqlParameterItem/1.0",
+              "name": "Help",
+              "label": "Documentation",
+              "type": 10,
+              "isRequired": true,
+              "typeSettings": {
+                "additionalResourceOptions": [],
+                "showDefault": false
+              },
+              "jsonData": "[\r\n    { \"value\":\"true\", \"label\":\"Show Help\" },\r\n    { \"value\":\"false\", \"label\":\"Hide Help\" },\r\n    { \"value\":\"changelog\", \"label\":\"Change Log\", \"selected\":true }\r\n]",
+              "timeContext": {
+                "durationMs": 86400000
+              },
+              "value": "true"
+            },
+            {
+              "id": "22697f3d-2d29-45bf-8fad-b92b7939c8f8",
+              "version": "KqlParameterItem/1.0",
+              "name": "Workspaces",
+              "type": 5,
+              "query": "where type =~ 'microsoft.operationalinsights/workspaces'\r\n| project id, selected = iff(id =~ todynamic('{DefaultSubscription_Internal}').ws, true, false), custId= properties.customerId",
+              "crossComponentResources": [
+                "{Subscriptions}"
+              ],
+              "value": "/subscriptions/69403112-e3c9-442d-bcb4-283e32740268/resourceGroups/ZorluRG-WE/providers/Microsoft.OperationalInsights/workspaces/zorlu",
+              "typeSettings": {
+                "additionalResourceOptions": [
+                  "value::1"
+                ]
+              },
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources"
+            },
+            {
+              "id": "6b0e6062-5ce7-4054-ba25-8e44052ada67",
+              "version": "KqlParameterItem/1.0",
+              "name": "TimeRange",
+              "label": "Time Range",
+              "type": 4,
+              "typeSettings": {
+                "selectableValues": [
+                  {
+                    "durationMs": 300000
+                  },
+                  {
+                    "durationMs": 900000
+                  },
+                  {
+                    "durationMs": 1800000
+                  },
+                  {
+                    "durationMs": 3600000
+                  },
+                  {
+                    "durationMs": 14400000
+                  },
+                  {
+                    "durationMs": 43200000
+                  },
+                  {
+                    "durationMs": 86400000
+                  },
+                  {
+                    "durationMs": 172800000
+                  },
+                  {
+                    "durationMs": 259200000
+                  },
+                  {
+                    "durationMs": 604800000
+                  },
+                  {
+                    "durationMs": 1209600000
+                  },
+                  {
+                    "durationMs": 2419200000
+                  },
+                  {
+                    "durationMs": 2592000000
+                  },
+                  {
+                    "durationMs": 5184000000
+                  },
+                  {
+                    "durationMs": 7776000000
+                  }
+                ]
+              },
+              "value": {
+                "durationMs": 86400000
+              }
+            },
+            {
+              "id": "fc437de9-e97b-46e6-8e46-c9d99ebf37a1",
+              "version": "KqlParameterItem/1.0",
+              "name": "TimeSlice",
+              "type": 10,
+              "description": "Time Slice option",
+              "isRequired": true,
+              "typeSettings": {
+                "additionalResourceOptions": [],
+                "showDefault": false
+              },
+              "jsonData": "[\r\n    { \"value\":\"1min\", \"label\":\"1 minute\" },\r\n    { \"value\":\"5min\", \"label\":\"5 minutes\" },\r\n    { \"value\":\"10min\", \"label\":\"10 minutes\" },\r\n    { \"value\":\"15min\", \"label\":\"15 minutes\", \"selected\":true },\r\n    { \"value\":\"1h\", \"label\":\"1 hour\"},\r\n    { \"value\":\"1d\", \"label\":\"1 day\"}\r\n]"
+            },
+            {
+              "id": "405c147c-6ec1-4b9d-8908-cce3d02b32e6",
+              "version": "KqlParameterItem/1.0",
+              "name": "Computer",
+              "type": 1,
+              "isHiddenWhenLocked": true,
+              "criteriaData": [
+                {
+                  "criteriaContext": {
+                    "operator": "Default",
+                    "resultValType": "static",
+                    "resultVal": "null"
+                  }
+                }
+              ]
+            }
+          ],
+          "style": "pills",
+          "queryType": 0,
+          "resourceType": "microsoft.operationalinsights/workspaces"
+        },
+        "name": "parameters - 1"
+      },
+      {
+        "type": 1,
+        "content": {
+          "json": "# Help \r\n\r\n## Requirements\r\n- VMInsights solution needs to be enabled for Azure VMs or Arc for Servers VMs.\r\n- In addition to the VMInsights The following counters needs to be collected.\r\n\t1. Process(*)\\% Processor Time\r\n\t1. Processor(*)\\% Processor Time\r\n\t1. Processor Information(*)\\% Processor Time\r\n\t> Note: Please note that **all instances** for the above counters needs to be selected. \r\n"
+        },
+        "conditionalVisibility": {
+          "parameterName": "Help",
+          "comparison": "isEqualTo",
+          "value": "true"
+        },
+        "name": "text - 2"
+      },
+      {
+        "type": 1,
+        "content": {
+          "json": "# Change Log\r\n- Release date: 11/11/2021"
+        },
+        "conditionalVisibility": {
+          "parameterName": "Help",
+          "comparison": "isEqualTo",
+          "value": "changelog"
+        },
+        "name": "text - 3"
+      },
+      {
+        "type": 11,
+        "content": {
+          "version": "LinkItem/1.0",
+          "style": "tabs",
+          "links": [
+            {
+              "id": "728d1be4-fa9d-4729-ab5f-ea4639748eaa",
+              "cellValue": "SelectedTab",
+              "linkTarget": "parameter",
+              "linkLabel": "CPU Utilization",
+              "subTarget": "CPUUtilization",
+              "style": "link"
+            },
+            {
+              "id": "7d1dbc41-83ec-43ee-b1da-4b9aa2529b93",
+              "cellValue": "SelectedTab",
+              "linkTarget": "parameter",
+              "linkLabel": "Disk Space",
+              "subTarget": "DiskState",
+              "style": "link"
+            },
+            {
+              "id": "5003bb4d-26ed-485c-b20a-090d9ea07e8a",
+              "cellValue": "SelectedTab",
+              "linkTarget": "parameter",
+              "linkLabel": "Disk Latency",
+              "subTarget": "DiskLatency",
+              "style": "link"
+            },
+            {
+              "id": "81b9cfca-547b-4074-9bd4-101847bf462f",
+              "cellValue": "SelectedTab",
+              "linkTarget": "parameter",
+              "linkLabel": "Memory Used",
+              "subTarget": "MemoryUsed",
+              "style": "link"
+            }
+          ]
+        },
+        "name": "links - 5"
+      },
+      {
+        "type": 12,
+        "content": {
+          "version": "NotebookGroup/1.0",
+          "groupType": "editable",
+          "items": [
+            {
+              "type": 9,
+              "content": {
+                "version": "KqlParameterItem/1.0",
+                "parameters": [
+                  {
+                    "id": "23ed50b4-a019-4801-9b24-176b0a9964fc",
+                    "version": "KqlParameterItem/1.0",
+                    "name": "CounterObjectName",
+                    "label": "Processor Object",
+                    "type": 10,
+                    "description": "Please set the the CPU Perf Object that is collected.",
+                    "isRequired": true,
+                    "typeSettings": {
+                      "additionalResourceOptions": [],
+                      "showDefault": false
+                    },
+                    "jsonData": "[\r\n    { \"value\":\"Processor\", \"label\":\"Processor\" , \"selected\":true },\r\n    { \"value\":\"Processor Information\", \"label\":\"Processor Information\" }\r\n]",
+                    "timeContext": {
+                      "durationMs": 86400000
+                    }
+                  }
+                ],
+                "style": "pills",
+                "queryType": 0,
+                "resourceType": "microsoft.operationalinsights/workspaces"
+              },
+              "name": "parameters - 3"
+            },
+            {
+              "type": 3,
+              "content": {
+                "version": "KqlItem/1.0",
+                "query": "let TimeSlice = {TimeSlice};\r\nlet CounterObject = \"{CounterObjectName}\";\r\nPerf\r\n| where  ObjectName  == CounterObject  and CounterName in (\"% Processor Time\")\r\n| summarize Avarage = round(avg(CounterValue)),SampleCount=count() by bin(TimeGenerated,TimeSlice),Computer\r\n| top-nested of Computer by dummy0=max(2), top-nested 1 of TimeGenerated by dummy1=max(TimeGenerated), top-nested of Avarage by dummy2=max(2)\r\n| project-away  dummy0,dummy1,dummy2\r\n| extend StartTime = TimeGenerated, EndTime = TimeGenerated + {TimeSlice}\r\n| project-away  TimeGenerated\r\n| extend PercentCPU = todecimal(Avarage)\r\n| project-away Avarage\r\n",
+                "size": 0,
+                "title": "CPU Utilization",
+                "timeContext": {
+                  "durationMs": 86400000
+                },
+                "timeContextFromParameter": "TimeRange",
+                "showRefreshButton": true,
+                "exportedParameters": [
+                  {
+                    "fieldName": "Computer",
+                    "parameterName": "Computer",
+                    "defaultValue": "\"\""
+                  },
+                  {
+                    "fieldName": "StartTime",
+                    "parameterName": "StartTime",
+                    "parameterType": 1
+                  },
+                  {
+                    "fieldName": "EndTime",
+                    "parameterName": "EndTime",
+                    "parameterType": 1
+                  }
+                ],
+                "showExportToExcel": true,
+                "queryType": 0,
+                "resourceType": "microsoft.operationalinsights/workspaces",
+                "crossComponentResources": [
+                  "{Workspaces}"
+                ],
+                "visualization": "graph",
+                "gridSettings": {
+                  "formatters": [
+                    {
+                      "columnMatch": "Severity",
+                      "formatter": 11
+                    },
+                    {
+                      "columnMatch": "Minimum",
+                      "formatter": 8,
+                      "formatOptions": {
+                        "min": 1,
+                        "max": 100,
+                        "palette": "greenRed"
+                      }
+                    },
+                    {
+                      "columnMatch": "Avarage",
+                      "formatter": 8,
+                      "formatOptions": {
+                        "min": 1,
+                        "max": 100,
+                        "palette": "greenRed"
+                      }
+                    },
+                    {
+                      "columnMatch": "Maximum",
+                      "formatter": 8,
+                      "formatOptions": {
+                        "min": 1,
+                        "max": 100,
+                        "palette": "greenRed"
+                      }
+                    }
+                  ],
+                  "rowLimit": 10000
+                },
+                "tileSettings": {
+                  "titleContent": {
+                    "columnMatch": "Computer",
+                    "formatter": 1
+                  },
+                  "leftContent": {
+                    "columnMatch": "Count",
+                    "formatter": 12,
+                    "formatOptions": {
+                      "palette": "auto"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "maximumSignificantDigits": 3,
+                        "maximumFractionDigits": 2
+                      }
+                    }
+                  },
+                  "showBorder": false
+                },
+                "graphSettings": {
+                  "type": 2,
+                  "topContent": {
+                    "columnMatch": "Computer",
+                    "formatter": 1
+                  },
+                  "centerContent": {
+                    "columnMatch": "PercentCPU",
+                    "formatter": 12,
+                    "formatOptions": {
+                      "palette": "none"
+                    },
+                    "numberFormat": {
+                      "unit": 1,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 2,
+                        "maximumSignificantDigits": 3
+                      }
+                    }
+                  },
+                  "nodeIdField": "Computer",
+                  "graphOrientation": 3,
+                  "showOrientationToggles": false,
+                  "nodeSize": null,
+                  "staticNodeSize": 100,
+                  "colorSettings": {
+                    "nodeColorField": "PercentCPU",
+                    "type": 4,
+                    "heatmapPalette": "greenRed",
+                    "heatmapMin": 0,
+                    "heatmapMax": 90,
+                    "emptyValueColor": "gray"
+                  },
+                  "hivesMargin": 5
+                }
+              },
+              "showPin": true,
+              "name": "query - 1"
+            },
+            {
+              "type": 3,
+              "content": {
+                "version": "KqlItem/1.0",
+                "query": "let TimeSlice = {TimeSlice};\r\nlet StartTime = datetime(\"{StartTime}\");\r\nlet EndTime = datetime(\"{EndTime}\");\r\nlet ProcessorCount = Perf\r\n| where ObjectName == \"Processor\" and CounterName == \"% Processor Time\" and InstanceName!=\"_Total\"\r\n| sort by InstanceName asc nulls first\r\n| summarize CPUCount = dcount(InstanceName) by Computer;\r\n\r\nlet Samples = Perf\r\n| where  ObjectName  == \"Process\" and CounterName in (\"% Processor Time\") and InstanceName != \"_Total\" and InstanceName != \"Idle\" \r\n| where Computer == \"{Computer}\" or isempty(\"{Computer}\")\r\n| where TimeGenerated between(StartTime .. EndTime);\r\n\r\nProcessorCount | join Samples on Computer \r\n| extend PercentCPU = CounterValue / CPUCount\r\n| summarize Maximum = max(PercentCPU), Minimum = min(PercentCPU), Avarage = avg(PercentCPU) by bin(TimeGenerated,TimeSlice),Computer,InstanceName\r\n| where Computer == \"{Computer}\" or isempty(\"{Computer}\")\r\n| project Computer, InstanceName, Maximum, Avarage, Minimum,StartTime,EndTime\r\n| order by Avarage desc",
+                "size": 0,
+                "exportedParameters": [
+                  {
+                    "fieldName": "Computer",
+                    "parameterName": "Computer",
+                    "defaultValue": "\"\""
+                  },
+                  {
+                    "fieldName": "StartTime",
+                    "parameterName": "StartTime",
+                    "parameterType": 1
+                  },
+                  {
+                    "fieldName": "EndTime",
+                    "parameterName": "EndTime",
+                    "parameterType": 1
+                  }
+                ],
+                "showExportToExcel": true,
+                "queryType": 0,
+                "resourceType": "microsoft.operationalinsights/workspaces",
+                "crossComponentResources": [
+                  "{Workspaces}"
+                ],
+                "visualization": "table",
+                "gridSettings": {
+                  "formatters": [
+                    {
+                      "columnMatch": "Severity",
+                      "formatter": 11
+                    },
+                    {
+                      "columnMatch": "Minimum",
+                      "formatter": 8,
+                      "formatOptions": {
+                        "min": 1,
+                        "max": 100,
+                        "palette": "greenRed"
+                      }
+                    },
+                    {
+                      "columnMatch": "Avarage",
+                      "formatter": 8,
+                      "formatOptions": {
+                        "min": 1,
+                        "max": 100,
+                        "palette": "greenRed"
+                      }
+                    },
+                    {
+                      "columnMatch": "Maximum",
+                      "formatter": 8,
+                      "formatOptions": {
+                        "min": 1,
+                        "max": 100,
+                        "palette": "greenRed"
+                      }
+                    }
+                  ],
+                  "rowLimit": 10000
+                },
+                "tileSettings": {
+                  "titleContent": {
+                    "columnMatch": "Computer",
+                    "formatter": 1
+                  },
+                  "leftContent": {
+                    "columnMatch": "Count",
+                    "formatter": 12,
+                    "formatOptions": {
+                      "palette": "auto"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "maximumSignificantDigits": 3,
+                        "maximumFractionDigits": 2
+                      }
+                    }
+                  },
+                  "showBorder": false
+                }
+              },
+              "conditionalVisibility": {
+                "parameterName": "Computer",
+                "comparison": "isNotEqualTo",
+                "value": "null"
+              },
+              "showPin": false,
+              "name": "query - 1 - Copy"
+            }
+          ]
+        },
+        "conditionalVisibility": {
+          "parameterName": "SelectedTab",
+          "comparison": "isEqualTo",
+          "value": "CPUUtilization"
+        },
+        "name": "CPU Issues"
+      },
+      {
+        "type": 12,
+        "content": {
+          "version": "NotebookGroup/1.0",
+          "groupType": "editable",
+          "items": [
+            {
+              "type": 3,
+              "content": {
+                "version": "KqlItem/1.0",
+                "query": "let Slice = {TimeSlice};\r\nInsightsMetrics\r\n| where Namespace  == 'LogicalDisk' and Name == 'FreeSpacePercentage'\r\n| extend Drive = tostring(parse_json(Tags).[\"vm.azm.ms/mountId\"]),PercentUsed = 100-Val\r\n| project TimeGenerated, Computer,Drive,PercentUsed\r\n| summarize Maximum = max(PercentUsed) by bin(TimeGenerated, Slice), Computer,Drive\r\n| top-nested of Computer by dummy0=max(2), top-nested 1 of TimeGenerated by dummy1=max(TimeGenerated), top-nested of Maximum by dummy2=max(2),top-nested of Drive by dummy3=max(2)\r\n|project-away  dummy0,dummy1,dummy2,dummy3\r\n| top-nested of Computer by dummy0=max(2), top-nested 1 of Maximum by dummy1=max(Maximum), top-nested of TimeGenerated by dummy2=max(2),top-nested of Drive by dummy3=max(2)\r\n|project-away  dummy0,dummy1,dummy2,dummy3\r\n| extend PercentSpaceUsed = todecimal(Maximum)\r\n| project-away Maximum\r\n",
+                "size": 0,
+                "title": "Percent Space Used",
+                "timeContext": {
+                  "durationMs": 0
+                },
+                "timeContextFromParameter": "TimeRange",
+                "showRefreshButton": true,
+                "exportFieldName": "Computer",
+                "exportParameterName": "Computer",
+                "queryType": 0,
+                "resourceType": "microsoft.operationalinsights/workspaces",
+                "crossComponentResources": [
+                  "{Workspaces}"
+                ],
+                "visualization": "graph",
+                "tileSettings": {
+                  "titleContent": {
+                    "columnMatch": "Result",
+                    "formatter": 1
+                  },
+                  "leftContent": {
+                    "columnMatch": "Count",
+                    "formatter": 12,
+                    "formatOptions": {
+                      "palette": "auto"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "maximumSignificantDigits": 3,
+                        "maximumFractionDigits": 2
+                      }
+                    }
+                  },
+                  "showBorder": false
+                },
+                "graphSettings": {
+                  "type": 2,
+                  "topContent": {
+                    "columnMatch": "Computer",
+                    "formatter": 1
+                  },
+                  "centerContent": {
+                    "columnMatch": "PercentSpaceUsed",
+                    "formatter": 12,
+                    "formatOptions": {
+                      "palette": "none"
+                    },
+                    "numberFormat": {
+                      "unit": 1,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 2,
+                        "maximumSignificantDigits": 3
+                      }
+                    }
+                  },
+                  "bottomContent": {
+                    "columnMatch": "Drive"
+                  },
+                  "nodeIdField": "Computer",
+                  "graphOrientation": 3,
+                  "showOrientationToggles": false,
+                  "nodeSize": null,
+                  "staticNodeSize": 100,
+                  "colorSettings": {
+                    "nodeColorField": "PercentSpaceUsed",
+                    "type": 4,
+                    "heatmapPalette": "greenRed",
+                    "heatmapMin": 60,
+                    "heatmapMax": 95,
+                    "emptyValueColor": "gray"
+                  },
+                  "hivesMargin": 5
+                }
+              },
+              "showPin": true,
+              "name": "query - 1"
+            },
+            {
+              "type": 3,
+              "content": {
+                "version": "KqlItem/1.0",
+                "query": "let Slice = {TimeSlice};\r\nInsightsMetrics\r\n| where Computer == \"{Computer}\"\r\n| where Namespace  == 'LogicalDisk' and Name == 'FreeSpacePercentage'\r\n| extend Drive = tostring(parse_json(Tags).[\"vm.azm.ms/mountId\"]),PercentUsed = 100-Val\r\n| project Computer,TimeGenerated,PercentUsed, Drive",
+                "size": 0,
+                "aggregation": 3,
+                "title": "Percent Used Space for '{Computer}'",
+                "timeContext": {
+                  "durationMs": 86400000
+                },
+                "timeContextFromParameter": "TimeRange",
+                "queryType": 0,
+                "resourceType": "microsoft.operationalinsights/workspaces",
+                "crossComponentResources": [
+                  "{Workspaces}"
+                ],
+                "visualization": "linechart",
+                "gridSettings": {
+                  "rowLimit": 10000,
+                  "filter": true
+                },
+                "graphSettings": {
+                  "type": 0
+                },
+                "chartSettings": {
+                  "xAxis": "TimeGenerated",
+                  "yAxis": [
+                    "PercentUsed"
+                  ],
+                  "group": "Drive",
+                  "createOtherGroup": null,
+                  "showLegend": true,
+                  "ySettings": {
+                    "min": 0,
+                    "max": 100
+                  }
+                }
+              },
+              "conditionalVisibility": {
+                "parameterName": "Computer",
+                "comparison": "isNotEqualTo",
+                "value": "null"
+              },
+              "name": "query - 1"
+            }
+          ]
+        },
+        "conditionalVisibility": {
+          "parameterName": "SelectedTab",
+          "comparison": "isEqualTo",
+          "value": "DiskState"
+        },
+        "name": "Disk State"
+      },
+      {
+        "type": 12,
+        "content": {
+          "version": "NotebookGroup/1.0",
+          "groupType": "editable",
+          "items": [
+            {
+              "type": 3,
+              "content": {
+                "version": "KqlItem/1.0",
+                "query": "let Slice = {TimeSlice};\r\nInsightsMetrics\r\n| where Namespace  == 'LogicalDisk' and Name in('WriteLatencyMs','ReadLatencyMs')\r\n| extend Drive = tostring(parse_json(Tags).[\"vm.azm.ms/mountId\"]),Val\r\n| project TimeGenerated, Computer,Name,Drive,Val\r\n| summarize Avarage = avg(Val) by bin(TimeGenerated, Slice), Computer,Drive,Name\r\n| top-nested of Computer by dummy0=max(2), top-nested 1 of TimeGenerated by dummy1=max(TimeGenerated), top-nested of Avarage by dummy2=max(2),top-nested of Drive by dummy3=max(2), top-nested of Name by dummy4=max(2)\r\n| project-away  dummy0,dummy1,dummy2,dummy3,dummy4\r\n| top-nested of Computer by dummy0=max(2), top-nested 1 of Avarage by dummy1=max(Avarage), top-nested of TimeGenerated by dummy2=max(2),top-nested of Drive by dummy3=max(2),top-nested of Name by dummy4=max(2)\r\n|project-away  dummy0,dummy1,dummy2,dummy3,dummy4\r\n",
+                "size": 0,
+                "title": "Disk Latency - Threshold 25ms",
+                "timeContext": {
+                  "durationMs": 86400000
+                },
+                "timeContextFromParameter": "TimeRange",
+                "showRefreshButton": true,
+                "exportFieldName": "Computer",
+                "exportParameterName": "Computer",
+                "queryType": 0,
+                "resourceType": "microsoft.operationalinsights/workspaces",
+                "crossComponentResources": [
+                  "{Workspaces}"
+                ],
+                "visualization": "graph",
+                "tileSettings": {
+                  "titleContent": {
+                    "columnMatch": "Result",
+                    "formatter": 1
+                  },
+                  "leftContent": {
+                    "columnMatch": "Count",
+                    "formatter": 12,
+                    "formatOptions": {
+                      "palette": "auto"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "maximumSignificantDigits": 3,
+                        "maximumFractionDigits": 2
+                      }
+                    }
+                  },
+                  "showBorder": false
+                },
+                "graphSettings": {
+                  "type": 2,
+                  "topContent": {
+                    "columnMatch": "Computer",
+                    "formatter": 1
+                  },
+                  "centerContent": {
+                    "columnMatch": "Avarage",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 22,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 2,
+                        "maximumSignificantDigits": 3
+                      }
+                    }
+                  },
+                  "bottomContent": {
+                    "columnMatch": "Name"
+                  },
+                  "nodeIdField": "Computer",
+                  "graphOrientation": 3,
+                  "showOrientationToggles": false,
+                  "nodeSize": null,
+                  "staticNodeSize": 100,
+                  "colorSettings": {
+                    "nodeColorField": "Avarage",
+                    "type": 4,
+                    "heatmapPalette": "greenRed",
+                    "heatmapMin": 0,
+                    "heatmapMax": 25,
+                    "emptyValueColor": "gray"
+                  },
+                  "hivesMargin": 5
+                }
+              },
+              "showPin": true,
+              "name": "query - 1"
+            },
+            {
+              "type": 3,
+              "content": {
+                "version": "KqlItem/1.0",
+                "query": "let Slice = {TimeSlice};\r\nInsightsMetrics\r\n| where Computer == \"{Computer}\"\r\n| where Namespace  == 'LogicalDisk' and Name in ('WriteLatencyMs','ReadLatencyMs')\r\n| extend Drive = tostring(parse_json(Tags).[\"vm.azm.ms/mountId\"]),Value = Val\r\n| summarize Avarage = avg(Value), Maximum = max(Value), Minimum = min(Value) by bin(TimeGenerated,Slice), Drive, Name\r\n| extend Series = strcat(Name,\" - \", Drive)\r\n| project-away  Name, Drive\r\n",
+                "size": 0,
+                "aggregation": 5,
+                "title": "Disk Latency for '{Computer}'",
+                "timeContext": {
+                  "durationMs": 86400000
+                },
+                "timeContextFromParameter": "TimeRange",
+                "showRefreshButton": true,
+                "queryType": 0,
+                "resourceType": "microsoft.operationalinsights/workspaces",
+                "crossComponentResources": [
+                  "{Workspaces}"
+                ],
+                "visualization": "linechart",
+                "gridSettings": {
+                  "rowLimit": 10000,
+                  "filter": true
+                },
+                "graphSettings": {
+                  "type": 0
+                },
+                "chartSettings": {
+                  "xAxis": "TimeGenerated",
+                  "yAxis": [
+                    "Avarage"
+                  ],
+                  "group": "Series",
+                  "createOtherGroup": null,
+                  "showLegend": true,
+                  "ySettings": {
+                    "min": 0
+                  }
+                }
+              },
+              "conditionalVisibility": {
+                "parameterName": "Computer",
+                "comparison": "isNotEqualTo",
+                "value": "null"
+              },
+              "name": "query - 1"
+            }
+          ]
+        },
+        "conditionalVisibility": {
+          "parameterName": "SelectedTab",
+          "comparison": "isEqualTo",
+          "value": "DiskLatency"
+        },
+        "name": "Disk Latency"
+      },
+      {
+        "type": 12,
+        "content": {
+          "version": "NotebookGroup/1.0",
+          "groupType": "editable",
+          "items": [
+            {
+              "type": 3,
+              "content": {
+                "version": "KqlItem/1.0",
+                "query": "let TimeSlice = {TimeSlice};\r\nInsightsMetrics\r\n| where Namespace == 'Memory' and  Name  == 'AvailableMB'\r\n| extend SizeMB = todecimal(parse_json(Tags).[\"vm.azm.ms/memorySizeMB\"])\r\n| extend PercentMemoryUsed = round((1 - (Val / SizeMB)) * 100)\r\n| summarize PerecentMemoryUsed = round(avg(PercentMemoryUsed)) by bin(TimeGenerated,TimeSlice),Computer,SizeMB\r\n| extend SizeGB = strcat(round(SizeMB/1024),\" GB\")\r\n| top-nested of Computer by dummy0=max(2), top-nested 1 of TimeGenerated by dummy1=max(TimeGenerated), top-nested of PerecentMemoryUsed by dummy2=max(2),top-nested of SizeGB by dummy3=max(2)\r\n| project-away  dummy0,dummy1,dummy2,dummy3\r\n| extend PerecentMemoryUsed = todecimal(PerecentMemoryUsed)\r\n",
+                "size": 0,
+                "title": "Percent Memory Used",
+                "timeContext": {
+                  "durationMs": 0
+                },
+                "timeContextFromParameter": "TimeRange",
+                "showRefreshButton": true,
+                "exportFieldName": "Computer",
+                "exportParameterName": "Computer",
+                "queryType": 0,
+                "resourceType": "microsoft.operationalinsights/workspaces",
+                "crossComponentResources": [
+                  "{Workspaces}"
+                ],
+                "visualization": "graph",
+                "tileSettings": {
+                  "titleContent": {
+                    "columnMatch": "Result",
+                    "formatter": 1
+                  },
+                  "leftContent": {
+                    "columnMatch": "Count",
+                    "formatter": 12,
+                    "formatOptions": {
+                      "palette": "auto"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "maximumSignificantDigits": 3,
+                        "maximumFractionDigits": 2
+                      }
+                    }
+                  },
+                  "showBorder": false
+                },
+                "graphSettings": {
+                  "type": 2,
+                  "topContent": {
+                    "columnMatch": "Computer",
+                    "formatter": 1
+                  },
+                  "centerContent": {
+                    "columnMatch": "PerecentMemoryUsed",
+                    "formatter": 12,
+                    "formatOptions": {
+                      "palette": "none"
+                    },
+                    "numberFormat": {
+                      "unit": 1,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 2,
+                        "maximumSignificantDigits": 3
+                      }
+                    }
+                  },
+                  "bottomContent": {
+                    "columnMatch": "SizeGB",
+                    "formatter": 1
+                  },
+                  "nodeIdField": "Computer",
+                  "graphOrientation": 3,
+                  "showOrientationToggles": false,
+                  "nodeSize": null,
+                  "staticNodeSize": 100,
+                  "colorSettings": {
+                    "nodeColorField": "PerecentMemoryUsed",
+                    "type": 4,
+                    "heatmapPalette": "greenRed",
+                    "heatmapMin": 50,
+                    "heatmapMax": 90,
+                    "emptyValueColor": "gray"
+                  },
+                  "hivesMargin": 5
+                }
+              },
+              "showPin": true,
+              "name": "query - 1"
+            },
+            {
+              "type": 3,
+              "content": {
+                "version": "KqlItem/1.0",
+                "query": "let Slice = {TimeSlice};\r\nInsightsMetrics\r\n| where Computer == \"{Computer}\"\r\n| where Namespace  == 'LogicalDisk' and Name in ('WriteLatencyMs','ReadLatencyMs')\r\n| extend Drive = tostring(parse_json(Tags).[\"vm.azm.ms/mountId\"]),Value = Val\r\n| summarize Avarage = avg(Value), Maximum = max(Value), Minimum = min(Value) by bin(TimeGenerated,Slice), Drive, Name\r\n| extend Series = strcat(Name,\" - \", Drive)\r\n| project-away  Name, Drive\r\n",
+                "size": 0,
+                "aggregation": 5,
+                "title": "Disk Latency for '{Computer}'",
+                "timeContext": {
+                  "durationMs": 86400000
+                },
+                "timeContextFromParameter": "TimeRange",
+                "showRefreshButton": true,
+                "queryType": 0,
+                "resourceType": "microsoft.operationalinsights/workspaces",
+                "crossComponentResources": [
+                  "{Workspaces}"
+                ],
+                "visualization": "linechart",
+                "gridSettings": {
+                  "rowLimit": 10000,
+                  "filter": true
+                },
+                "graphSettings": {
+                  "type": 0
+                },
+                "chartSettings": {
+                  "xAxis": "TimeGenerated",
+                  "yAxis": [
+                    "Avarage"
+                  ],
+                  "group": "Series",
+                  "createOtherGroup": null,
+                  "showLegend": true,
+                  "ySettings": {
+                    "min": 0
+                  }
+                }
+              },
+              "conditionalVisibility": {
+                "parameterName": "Computer",
+                "comparison": "isNotEqualTo",
+                "value": "null"
+              },
+              "name": "query - 1"
+            }
+          ]
+        },
+        "conditionalVisibility": {
+          "parameterName": "SelectedTab",
+          "comparison": "isEqualTo",
+          "value": "MemoryUsed"
+        },
+        "name": "Memory Used"
+      },
+      {
+        "type": 12,
+        "content": {
+          "version": "NotebookGroup/1.0",
+          "groupType": "editable",
+          "items": [
+            {
+              "type": 3,
+              "content": {
+                "version": "KqlItem/1.0",
+                "query": "DnsEvents\r\n| where SubType == 'LookupQuery' and isnotempty(MaliciousIP)\r\n| summarize Attempts = count() by Name",
+                "size": 0,
+                "title": "Attempts by Name",
+                "timeContext": {
+                  "durationMs": 0
+                },
+                "timeContextFromParameter": "TimeRange",
+                "exportFieldName": "Name",
+                "exportParameterName": "Name",
+                "exportDefaultValue": "\"\"",
+                "queryType": 0,
+                "resourceType": "microsoft.operationalinsights/workspaces",
+                "crossComponentResources": [
+                  "{Workspaces}"
+                ],
+                "visualization": "tiles",
+                "gridSettings": {
+                  "filter": true
+                },
+                "tileSettings": {
+                  "titleContent": {
+                    "columnMatch": "Name",
+                    "formatter": 1
+                  },
+                  "leftContent": {
+                    "columnMatch": "Attempts",
+                    "formatter": 12,
+                    "formatOptions": {
+                      "palette": "auto"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "maximumSignificantDigits": 3,
+                        "maximumFractionDigits": 2
+                      }
+                    }
+                  },
+                  "showBorder": false
+                }
+              },
+              "customWidth": "50",
+              "name": "query - 8"
+            },
+            {
+              "type": 3,
+              "content": {
+                "version": "KqlItem/1.0",
+                "query": "DnsEvents\r\n| where SubType == 'LookupQuery' and isnotempty(MaliciousIP)\r\n| where Name == \"{Name}\" or isempty(\"{Name}\")\r\n| summarize Attempts = count() by ClientIP",
+                "size": 0,
+                "title": "Attempts by ClientIP",
+                "timeContext": {
+                  "durationMs": 0
+                },
+                "timeContextFromParameter": "TimeRange",
+                "exportFieldName": "ClientIP",
+                "exportParameterName": "ClientIP",
+                "exportDefaultValue": "\"\"",
+                "queryType": 0,
+                "resourceType": "microsoft.operationalinsights/workspaces",
+                "crossComponentResources": [
+                  "{Workspaces}"
+                ],
+                "visualization": "tiles",
+                "tileSettings": {
+                  "titleContent": {
+                    "columnMatch": "ClientIP",
+                    "formatter": 1
+                  },
+                  "leftContent": {
+                    "columnMatch": "Attempts",
+                    "formatter": 12,
+                    "formatOptions": {
+                      "palette": "auto"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "maximumSignificantDigits": 3,
+                        "maximumFractionDigits": 2
+                      }
+                    }
+                  },
+                  "showBorder": false
+                }
+              },
+              "customWidth": "50",
+              "name": "query - 8"
+            },
+            {
+              "type": 3,
+              "content": {
+                "version": "KqlItem/1.0",
+                "query": "let ErrorTable = datatable (Code: string, Message: string ) \r\n[\r\n\"0\",\"Success\",\r\n\"1\",\"Format Error\",\r\n\"2\",\"Server Failure\",\r\n\"3\",\"Non-Existent Domain\",\r\n\"4\",\"Not Implemented\",\r\n\"5\",\"Query Refused\",\r\n\"6\",\"Name Exists when it should not\",\r\n\"7\",\"RR Set Exists when it should not\",\r\n\"8\",\"RR Set that should exist does not\",\r\n\"9\",\"Not Authorized\",\r\n\"10\",\"Name not contained in zone\",\r\n\"11\",\"DSO-TYPE Not Implemented\",\r\n\"16\",\"Bad OPT Version\",\r\n\"17\",\"TKey not recognized\",\r\n\"18\",\"Signature out of time window\",\r\n\"19\",\"Bad TKEY Mode\",\r\n\"20\",\"Algorithm not supported\",\r\n\"21\",\"The pipe has been ended.\",\r\n\"22\",\"Bad Truncation\",\r\n\"23\",\"Bad/missing Server Cookie\"\r\n];\r\nlet MessagesBag = toscalar (ErrorTable | extend p = pack(Code, Message) | summarize  dict = make_bag(p));\r\nDnsEvents\r\n| where SubType == 'LookupQuery' and isnotempty(MaliciousIP)\r\n| where ClientIP == \"{ClientIP}\" or isempty(\"{ClientIP}\")\r\n| where Name == \"{Name}\" or isempty(\"{Name}\")\r\n| extend Result = MessagesBag[tostring(ResultCode)]\r\n| project Computer, ClientIP, Name, QueryType, TimeGenerated, Result, IPAddresses, IndicatorThreatType, Confidence, Severity, RemoteIPLongitude, RemoteIPLatitude, RemoteIPCountry\r\n",
+                "size": 0,
+                "timeContext": {
+                  "durationMs": 7776000000
+                },
+                "timeContextFromParameter": "TimeRange",
+                "queryType": 0,
+                "resourceType": "microsoft.operationalinsights/workspaces",
+                "crossComponentResources": [
+                  "{Workspaces}"
+                ],
+                "visualization": "table",
+                "gridSettings": {
+                  "rowLimit": 10000,
+                  "filter": true,
+                  "sortBy": [
+                    {
+                      "itemKey": "IPAddresses",
+                      "sortOrder": 1
+                    }
+                  ]
+                },
+                "sortBy": [
+                  {
+                    "itemKey": "IPAddresses",
+                    "sortOrder": 1
+                  }
+                ]
+              },
+              "name": "query - 8"
+            }
+          ]
+        },
+        "conditionalVisibility": {
+          "parameterName": "SelectedTab",
+          "comparison": "isEqualTo",
+          "value": "MaliciousIPs"
+        },
+        "name": "MaliciousIPs"
+      }
+    ],
+    "fallbackResourceIds": [
+      "Azure Monitor"
+    ],
+    "$schema": "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json"
+  }

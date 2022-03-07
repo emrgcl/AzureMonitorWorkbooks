@@ -1,0 +1,10 @@
+let TimeSlice = 15min;
+let Instance = 'your computer in InsightsMetrics table';
+InsightsMetrics
+| where Computer == Instance
+| where Namespace  contains  'prometheus'
+| where Name in ('redis_db_keys','redis_db_keys_expiring')
+| extend tags = parse_json(Tags)
+| extend db = tostring(tags.db)
+| summarize avg = round(avg(Val)) by bin(TimeGenerated,TimeSlice),Computer,Name,db
+| summarize sum = sum(avg) by TimeGenerated, Computer, Name

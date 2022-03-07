@@ -1,0 +1,9 @@
+let TimeSlice = 1min;
+let Instance = 'your computer in InsightsMetrics table';
+InsightsMetrics
+| where Computer == Instance
+| where Namespace  contains  'prometheus'
+| where Name == 'redis_commands_total'
+| extend tags = parse_json(Tags)
+| extend cmd = tostring(tags.cmd)
+| summarize Avarage = round(avg(Val)) by bin(TimeGenerated,TimeSlice),Computer,Name, cmd

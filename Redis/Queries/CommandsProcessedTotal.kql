@@ -1,0 +1,8 @@
+let TimeSlice = 15min;
+let Instance = 'your computer in InsightsMetrics table';
+let Metric = 'redis_commands_processed_total';
+InsightsMetrics
+| where Computer == Instance
+| where Namespace  contains  'prometheus'
+| where Name == Metric
+| summarize Avarage = round(avg(Val)) by bin(TimeGenerated,TimeSlice),Computer

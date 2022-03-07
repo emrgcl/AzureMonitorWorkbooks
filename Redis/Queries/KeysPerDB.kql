@@ -1,0 +1,11 @@
+let TimeSlice = 1h;
+let Instance = 'your computer in InsightsMetrics table';
+let Metric = 'redis_db_keys';
+InsightsMetrics
+| where Computer == Instance
+| where Namespace  contains  'prometheus'
+| where Name == Metric
+| extend tags = parse_json(Tags)
+| extend db = tostring(tags.db)
+| summarize Maximum = round(max(Val)) by bin(TimeGenerated,TimeSlice),Computer,Name,db
+| order by Maximum desc 
