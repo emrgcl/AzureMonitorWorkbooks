@@ -1,0 +1,7 @@
+//Lock Tables
+let TimeSlice = 5min;
+InsightsMetrics
+| where Name =='pg_locks_count' and Val != 0
+| extend Tags = parse_json(Tags)
+| project Computer, Val, TimeGenerated,Server = tostring(Tags.server), DatabaseName = tostring(Tags.datname),DatID = tostring(Tags.datid),Name, Mode = tostring(Tags.mode)
+| summarize max = max(Val) by Computer,Name,Server,DatabaseName,DatID,Mode, bin(TimeGenerated, TimeSlice)

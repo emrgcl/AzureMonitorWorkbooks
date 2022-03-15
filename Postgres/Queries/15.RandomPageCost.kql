@@ -1,0 +1,6 @@
+// Random Page Cost
+InsightsMetrics
+| where Name == 'pg_settings_random_page_cost'
+| extend Tags = parse_json(Tags)
+| project Computer, Val, TimeGenerated,Server = tostring(Tags.server)
+| summarize arg_max(TimeGenerated,*) by Computer,Server,Val

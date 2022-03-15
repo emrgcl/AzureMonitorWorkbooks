@@ -1,0 +1,6 @@
+//effective cache
+InsightsMetrics
+| where Name == 'pg_settings_effective_cache_size_bytes'
+| extend Tags = parse_json(Tags)
+| project Computer, Val, TimeGenerated,Server = tostring(Tags.server)
+| summarize arg_max(TimeGenerated,*) by Computer,Server,Val

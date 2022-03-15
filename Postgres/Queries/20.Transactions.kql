@@ -1,0 +1,7 @@
+//Transactions
+let TimeSlice = 5min;
+InsightsMetrics
+| where Name in ('pg_stat_database_xact_commit','pg_stat_database_xact_rollback')
+| extend Tags = parse_json(Tags)
+| project Computer, Val, TimeGenerated,Server = tostring(Tags.server), DatabaseName = tostring(Tags.datname),DatID = tostring(Tags.datid),Name
+| summarize Avarage = avg(Val) by Computer,Name,Server,DatabaseName,DatID, bin(TimeGenerated, TimeSlice)

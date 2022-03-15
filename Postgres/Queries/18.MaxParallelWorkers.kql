@@ -1,0 +1,6 @@
+//ACtive Session
+InsightsMetrics
+| where Name == 'pg_settings_max_parallel_workers'
+| extend Tags = parse_json(Tags)
+| project Computer, Val, TimeGenerated,Server = tostring(Tags.server)
+| summarize arg_max(TimeGenerated,*) by Computer,Server,Val

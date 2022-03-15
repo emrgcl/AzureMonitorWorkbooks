@@ -1,0 +1,4 @@
+//Number of open file descriptors
+InsightsMetrics
+| where Name == 'process_open_fds'
+| project Computer, Val, TimeGenerated

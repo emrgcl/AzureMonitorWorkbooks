@@ -1,0 +1,6 @@
+//Active sessions
+InsightsMetrics
+| where Name == 'pg_stat_activity_count'
+| extend Tags = parse_json(Tags)
+| project Computer, Val, TimeGenerated,Server = tostring(Tags.server), DatabaseName = tostring(Tags.datname), State = tostring(Tags.state)
+| summarize arg_max(TimeGenerated,*) by Computer,Server,Val, DatabaseName, State

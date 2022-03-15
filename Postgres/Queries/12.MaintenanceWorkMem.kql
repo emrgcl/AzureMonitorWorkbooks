@@ -1,0 +1,6 @@
+//Maintenance Work Mem
+InsightsMetrics
+| where Name == 'pg_settings_maintenance_work_mem_bytes'
+| extend Tags = parse_json(Tags)
+| project Computer, Val, TimeGenerated,Server = tostring(Tags.server)
+| summarize arg_max(TimeGenerated,*) by Computer,Server,Val
