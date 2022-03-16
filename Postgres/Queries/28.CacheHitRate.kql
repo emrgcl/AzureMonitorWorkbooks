@@ -1,0 +1,7 @@
+// Cache HitRate ==> pg_stat_database_blks_hit / pg_stat_database_blks_hit + pg_stat_database_blks_read
+let TimeSlice = 5min;
+InsightsMetrics
+| where Name in ('pg_stat_database_blks_hit','pg_stat_database_blks_read')
+| extend Tags = parse_json(Tags)
+| project Computer, Val, TimeGenerated,Server = tostring(Tags.server), DatabaseName = tostring(Tags.datname),DatID = tostring(Tags.datid),Name
+| summarize avg = avg(Val),max = max(Val),sum=sum(Val) by Computer,Name,Server,DatabaseName,DatID,bin(TimeGenerated, TimeSlice)

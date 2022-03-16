@@ -1,0 +1,7 @@
+// CheckPoint stats
+let TimeSlice = 5min;
+InsightsMetrics
+| where Name in ('pg_stat_bgwriter_checkpoint_write_time','pg_stat_bgwriter_checkpoint_sync_time')
+| extend Tags = parse_json(Tags)
+| project Computer, Val, TimeGenerated,Server = tostring(Tags.server), DatabaseName = tostring(Tags.datname),DatID = tostring(Tags.datid),Name
+| summarize avg = avg(Val),max = max(Val),sum=sum(Val) by Computer,Name,Server,DatabaseName,DatID,bin(TimeGenerated, TimeSlice)

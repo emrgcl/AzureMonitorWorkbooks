@@ -1,0 +1,7 @@
+//Return Data
+let TimeSlice = 5min;
+InsightsMetrics
+| where Name =='pg_stat_database_tup_returned' and Val != 0
+| extend Tags = parse_json(Tags)
+| project Computer, Val, TimeGenerated,Server = tostring(Tags.server), DatabaseName = tostring(Tags.datname),DatID = tostring(Tags.datid),Name
+| summarize avg = avg(Val),max = max(Val),sum=sum(Val) by Computer,Name,Server,DatabaseName,DatID, bin(TimeGenerated, TimeSlice)
